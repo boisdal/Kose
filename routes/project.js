@@ -4,8 +4,8 @@ const Project = require('../models/Project')
 
 router.get('/:projectKey', ensureAuth , async (req, res) => {
   key = req.params.projectKey
-  project = await Project.findOne({ key: key })
-  res.render('pages/home', {userinfo:req.user})
+  let project = await Project.findOne({ key: key })
+  res.render('pages/project', {userinfo:req.user, project: project})
 })
 
 module.exports=router;
