@@ -25,11 +25,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   accesses: [
-    {
-      projectKey:{
-        type: String
-      }
-    }
+    {type: String}
   ],
   createdAt: {
     type: Date,

@@ -2,7 +2,11 @@
 
 <body>
     <%- include('../commons/navbar', {userinfo: userinfo}) %>
-    
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 p-4">
+        <% for (let project of projects){ %>
+        <%- include('../partials/projectCard', {project: project}) %>
+        <% } %>
+    </div>
 </body>
 
 <%- include('../commons/foot') %>
