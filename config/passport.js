@@ -29,6 +29,7 @@ module.exports = function (passport) {
           if (user) {
             //If user present in our database.
             done(null, user)
+            console.log(`User logged in : ${user.displayName} (${user.email})`)
           } else {
             // if user is not preset in our database save user data to database.
             user = await User.create(newUser)
