@@ -1,0 +1,54 @@
+.bracket {
+    color: #808080;
+}
+
+.issueType {
+    color: #409cd6;
+}
+
+.attribute {
+    color: #79bdc3;
+}
+
+.value {
+    color: #ce9178;
+}
+
+body {
+    background-color: #212529;
+    color: white;
+}
+
+.card {
+    background-color: #808080;
+}
+
+.issue-container {
+    width: fit-content;
+}
+
+.bar {
+    display: block;
+    height: 3px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.bar-part {
+    height: 3px;
+    display: inline-block;
+    top: -15px;
+    position: relative;
+}
+
+.bar-part.todo-part {
+    background-color: #a940d6;
+}
+
+.bar-part.doing-part {
+    background-color: #407ed6;
+}
+
+.bar-part.done-part {
+    background-color: #77d640;
+}
