@@ -1,8 +1,9 @@
-<div style="margin-left: 2rem">
+<div class="issue-root" style="margin-left: 2rem">
     <% if (issue.childrenIssueList.length) { %>
     <div class="issue-container">
+        <i class="fold-button fa fa-chevron-down"></i> 
         <span class="bracket">&lt;</span><%- include('./issueText', {issue: issue}) %><span class="bracket">&gt;</span>
-        <div class="bar"><span class="bar-part todo-part" style=<%- '"width: ' + Math.floor(95*issue.chTodoSp / (issue.chTodoSp + issue.chDoingSp + issue.chDoneSp)) + '%;"' %>></span><span class="bar-part doing-part" style=<%- '"width: ' + Math.floor(95*issue.chDoingSp / (issue.chTodoSp + issue.chDoingSp + issue.chDoneSp)) + '%;"' %>></span><span class="bar-part done-part" style=<%- '"width: ' + Math.floor(95*issue.chDoneSp / (issue.chTodoSp + issue.chDoingSp + issue.chDoneSp)) + '%;"' %>></span></div>
+        <div class="bar"><%- include('./progressBarPart', {issue: issue, step: 'todo'}) %><%- include('./progressBarPart', {issue: issue, step: 'doing'}) %><%- include('./progressBarPart', {issue: issue, step: 'done'}) %></div>
     </div>
     <% for (let childIssue of issue.childrenIssueList){ %>
         <%- include('./issue', {issue: childIssue}) %>
