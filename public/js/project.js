@@ -10,3 +10,5 @@ $('.fold-button').on('click', (e) => {
     }
     return false
 })
+
+$('.fa-check').parent().find('.fa-chevron-down').click()
