@@ -1,4 +1,4 @@
-<%- include('../commons/head', {title: project.name, cssfile: 'project'}) %>
+<%- include('../commons/head', {title: project.name, additionalCss: ['structure']}) %>
 
 <body>
     <%- include('../commons/navbar', {userinfo: userinfo}) %>
@@ -7,7 +7,7 @@
         <h3><%= project.description %></h3>
         <div class="p-2" style="margin-left: -2rem;">
             <% for (let issue of rootIssueList){ %>
-                <%- include('../partials/issue', {issue: issue}) %>
+                <%- include('../partials/issue', {issue: issue, project: project}) %>
             <% } %>
         </div>
     </div>
@@ -15,4 +15,4 @@
 
 <%- include('../commons/foot') %>
 
-<script src="/js/project.js"></script>
+<script src="/js/structure.js"></script>

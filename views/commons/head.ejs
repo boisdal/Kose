@@ -10,7 +10,11 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="/css/main.css" type="text/css" rel="stylesheet">
-    <link href="/css/<%= locals.cssfile ? cssfile : 'empty.css' %>.css" type="text/css" rel="stylesheet">
+    <% if (locals.additionalCss) { %>
+    <% for (let css of additionalCss) { %>
+    <link href="/css/<%= css %>.css" type="text/css" rel="stylesheet">
+    <% } %>
+    <% } %>
     <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">

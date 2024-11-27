@@ -3,16 +3,25 @@ const { ensureAuth } = require('../middleware/auth')
 const Project = require('../models/Project')
 const Issue = require('../models/Issue')
 
-router.get('/:projectKey', ensureAuth , async (req, res) => {
-  key = req.params.projectKey
-  let project = await Project.findOne({ key: key })
+router.get('/:projectKey', ensureAuth, async (req, res) => {
+  let key = req.params.projectKey
+  let project = await Project.findOne({key: key})
   // TODO: Traiter cas où clé projet inexistante
   // TODO: S'assurer des droits du user
-  let rootIssueList = await Issue.find({ projectId: project._id, parentIssue: null })
+  let rootIssueList = await Issue.find({projectId: project._id, parentIssue: null})
   for (let rootIssue of rootIssueList) {
     await populateIssueChildren(rootIssue)
   }
   res.render('pages/project', {userinfo:req.user, project: project, rootIssueList: rootIssueList})
+})
+
+router.get('/:projectKey/issue/:issueKey', ensureAuth, async (req, res) => {
+  let projectKey = req.params.projectKey
+  let project = await Project.findOne({key: projectKey})
+  let issueKey = req.params.issueKey
+  let issue = await Issue.findOne({projectId: project._id, key: issueKey})
+  await populateIssueChildren(issue)
+  res.render('pages/issue', {userinfo:req.user, project: project, issue: issue})
 })
 
 const populateIssueChildren = async function(issue) {

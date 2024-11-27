@@ -1,0 +1,21 @@
+<%- include('../commons/head', {title: `Issue n°${issue.key} : ${issue.title}`, additionalCss: ['issue', 'structure']}) %>
+
+<body>
+    <%- include('../commons/navbar', {userinfo: userinfo}) %>
+    <div class="p-3">
+        <h1><%= issue.title %></h1>
+        <h3><%= issue.description %></h3>
+        <% if (issue.childrenIssueList.length != 0) { %>
+        <h3>Détail de l'implémentation :</h3>
+        <div class="p-2" style="margin-left: -2rem;">
+            <% for (let child of issue.childrenIssueList){ %>
+                <%- include('../partials/issue', {issue: child, project: project}) %>
+            <% } %>
+        </div>
+        <% } %>
+    </div>
+</body>
+
+<%- include('../commons/foot') %>
+
+<script src="/js/structure.js"></script>
