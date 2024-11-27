@@ -4,7 +4,11 @@
     <%- include('../commons/navbar', {userinfo: userinfo}) %>
     <div class="p-3">
         <h1><%= issue.title %></h1>
-        <h3><%= issue.description %></h3>
+        <h6><% if (issue.status == 'todo') { %> <i class="fa fa-lightbulb-o" style="color: lightgray"></i> To do<% } %>
+            <% if (issue.status == 'doing') { %> <i class="fa fa-clock-o" style="color: rgb(58, 203, 255)"></i> In progress<% } %>
+            <% if (issue.status == 'done') { %> <i class="fa fa-check" style="color: lightgreen"></i> Done<% } %></h6>
+        <h6><%= issue.estimation %> Story Points</h6>
+        <h6><%= issue.description %></h6>
         <% if (issue.childrenIssueList.length != 0) { %>
         <h3>Détail de l'implémentation :</h3>
         <div class="p-2" style="margin-left: -2rem;">
