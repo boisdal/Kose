@@ -55,6 +55,7 @@
 }
 
 .fold-button {
+    cursor: pointer;
     transition: transform 100ms ease-in-out;
     color: #808080;
     user-select: none; /* standard syntax */

@@ -7,15 +7,7 @@ router.get('/', ensureGuest ,(req, res) => {
   })
 
 router.get("/home", ensureAuth, async(req,res)=>{
-  accesses = req.user.accesses
-  if (accesses.includes('*')) {
-    criteria = {}
-  } else {
-    criteria = { key: { $in: accesses } }
-  }
-  let projectList = await Project.find(criteria)
   // TODO: traiter absence de projets avec page spéciale
-  // TODO: changer barre de nav pour mettre icone projet et selecteur projet
-  res.render('pages/home', {userinfo:req.user, projectList: projectList})
+  res.render('pages/home', {user:req.user, projectList: req.user.projectList})
 })
 module.exports=router;

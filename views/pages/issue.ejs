@@ -1,7 +1,7 @@
 <%- include('../commons/head', {title: `Issue n°${issue.key} : ${issue.title}`, additionalCss: ['issue', 'structure']}) %>
 
 <body>
-    <%- include('../commons/navbar', {userinfo: userinfo}) %>
+    <%- include('../commons/navbar', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: ''}) %>
     <div class="p-3">
         <h1><%= issue.title %></h1>
         <h6><% if (issue.status == 'todo') { %> <i class="fa fa-lightbulb-o" style="color: lightgray"></i> To do<% } %>

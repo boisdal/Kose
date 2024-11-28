@@ -1,18 +1,11 @@
-<%- include('../commons/head', {title: project.name, additionalCss: ['structure']}) %>
+<%- include('../commons/head', {title: project.name, additionalCss: []}) %>
 
 <body>
-    <%- include('../commons/navbar', {userinfo: userinfo}) %>
+    <%- include('../commons/navbar', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: ''}) %>
     <div class="p-3">
         <h1><%= project.name %></h1>
         <h3><%= project.description %></h3>
-        <div class="p-2" style="margin-left: -2rem;">
-            <% for (let issue of rootIssueList){ %>
-                <%- include('../partials/issue', {issue: issue, project: project}) %>
-            <% } %>
-        </div>
     </div>
 </body>
 
 <%- include('../commons/foot') %>
-
-<script src="/js/structure.js"></script>

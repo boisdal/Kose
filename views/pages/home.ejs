@@ -1,7 +1,7 @@
 <%- include('../commons/head', {title: 'Home'}) %>
 
 <body>
-    <%- include('../commons/navbar', {userinfo: userinfo}) %>
+    <%- include('../commons/navbar', {user: user, currentProject: 'Select project', currentProjectKey: '', urlSuffix: ''}) %>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 p-4">
         <% for (let project of projectList){ %>
             <%- include('../partials/projectCard', {project: project}) %>

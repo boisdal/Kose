@@ -31,6 +31,7 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  projectList: [],
 })
 
 module.exports = mongoose.model('User', UserSchema)
