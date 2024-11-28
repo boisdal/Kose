@@ -1,7 +1,7 @@
-<%- include('../commons/head', {title: `Issue n°${issue.key} : ${issue.title}`, additionalCss: ['issue', 'structure']}) %>
+<%- include('../commons/head.com.ejs', {title: `Issue n°${issue.key} : ${issue.title}`, additionalCss: ['issue', 'structure']}) %>
 
 <body>
-    <%- include('../commons/navbar', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: ''}) %>
+    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: ''}) %>
     <div class="p-3">
         <h1><%= issue.title %></h1>
         <h6><% if (issue.status == 'todo') { %> <i class="fa fa-lightbulb-o" style="color: lightgray"></i> To do<% } %>
@@ -13,13 +13,13 @@
         <h3>Détail de l'implémentation :</h3>
         <div class="p-2" style="margin-left: -2rem;">
             <% for (let child of issue.childrenIssueList){ %>
-                <%- include('../partials/issue', {issue: child, project: project}) %>
+                <%- include('../partials/issue.part.ejs', {issue: child, project: project}) %>
             <% } %>
         </div>
         <% } %>
     </div>
 </body>
 
-<%- include('../commons/foot') %>
+<%- include('../commons/foot.com.ejs') %>
 
 <script src="/js/structure.js"></script>

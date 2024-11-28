@@ -1,4 +1,4 @@
-const Project = require('../models/Project')
+const Project = require('../models/Project.model')
 
 module.exports = {
   ensureAuth: async function (req, res, next) {

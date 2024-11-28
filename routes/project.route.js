@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const { ensureAuth } = require('../middleware/auth')
-const Project = require('../models/Project')
-const Issue = require('../models/Issue')
-const populateIssueChildren = require('../utils/issueUtils')
+const Project = require('../models/Project.model')
+const Issue = require('../models/Issue.model')
+const populateIssueChildren = require('../utils/issue.utils')
 
 router.get('/:projectKey', ensureAuth, async (req, res) => {
   let key = req.params.projectKey
@@ -13,7 +13,7 @@ router.get('/:projectKey', ensureAuth, async (req, res) => {
   for (let rootIssue of rootIssueList) {
     await populateIssueChildren(rootIssue)
   }
-  res.render('pages/project', {user:req.user, project: project, rootIssueList: rootIssueList})
+  res.render('pages/project.view.ejs', {user:req.user, project: project, rootIssueList: rootIssueList})
 })
 
 

@@ -1,4 +1,4 @@
-const Issue = require('../models/Issue')
+const Issue = require('../models/Issue.model')
 
 const populateIssueChildren = async function(issue) {
     issue.childrenIssueList = await Issue.find({ parentIssue: issue._id })

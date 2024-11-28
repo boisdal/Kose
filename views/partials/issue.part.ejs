@@ -1,0 +1,15 @@
+<div class="issue-root" style="margin-left: 2rem">
+    <% if (issue.childrenIssueList.length) { %>
+    <div class="issue-container">
+        <i class="fold-button fa fa-chevron-down fa-fw"></i> 
+        <span class="bracket">&lt;</span><%- include('./issueText.part.ejs', {issue: issue, project: project}) %><span class="bracket">&gt;</span>
+        <div class="bar"><%- include('./progressBarPart.part.ejs', {issue: issue, step: 'todo'}) %><%- include('./progressBarPart.part.ejs', {issue: issue, step: 'doing'}) %><%- include('./progressBarPart.part.ejs', {issue: issue, step: 'done'}) %></div>
+    </div>
+    <% for (let childIssue of issue.childrenIssueList){ %>
+        <%- include('./issue.part.ejs', {issue: childIssue, project: project}) %>
+    <% } %>
+    <i class="fa fa-fw"></i> <span class="bracket">&lt;&#47;</span><span class="issueType"><%= issue.issueType %></span><span class="bracket">&gt;</span>
+    <% } else { %>
+        <i class="fa fa-fw"></i> <span class="bracket">&lt;</span><%- include('./issueText.part.ejs', {issue: issue, project: project}) %><span class="bracket">&#47;&gt;</span>
+    <% } %>
+</div>

@@ -1,0 +1,11 @@
+<%- include('../commons/head.com.ejs', {title: project.name, additionalCss: []}) %>
+
+<body>
+    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: ''}) %>
+    <div class="p-3">
+        <h1><%= project.name %></h1>
+        <h3><%= project.description %></h3>
+    </div>
+</body>
+
+<%- include('../commons/foot.com.ejs') %>

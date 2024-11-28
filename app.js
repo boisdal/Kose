@@ -40,12 +40,12 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
-app.use(require("./routes/index"))
-app.use('/auth', require('./routes/auth'))
-app.use('/project', require('./routes/project'))
-app.use('/project', require('./routes/backlog'))
-app.use('/project', require('./routes/version'))
-app.use('/project', require('./routes/issue'))
+app.use(require("./routes/index.route"))
+app.use('/auth', require('./routes/auth.route'))
+app.use('/project', require('./routes/project.route'))
+app.use('/project', require('./routes/backlog.route'))
+app.use('/project', require('./routes/version.route'))
+app.use('/project', require('./routes/issue.route'))
 
 
 
