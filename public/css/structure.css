@@ -69,3 +69,38 @@
     transform: rotate(-90deg);
     transition: transform 100ms ease-in-out;
 }
+
+.backlogRoot {
+    width: fit-content;
+}
+
+#newIssueZone {
+    width: 100% - 2rem;
+    height: 1.5rem;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #198754;
+    margin-left: 2rem;
+}
+
+#newIssueZone:hover {
+    border: 2px solid;
+    border-color: #198754;
+    cursor: pointer;
+}
+
+#newIssueButton {
+    margin-left: 2rem
+}
+
+div.issue-text {
+    display: unset;
+}
+
+div.issue-text.parent-choice:hover {
+    border: 2px solid;
+    border-radius: 5px;
+    border-color: #198754;
+    margin-left: -2px;
+    cursor: pointer;
+}

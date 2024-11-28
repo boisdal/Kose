@@ -1,8 +1,8 @@
-<span class="issueType"><%= issue.issueType %></span> 
+<div class="issue-text"><span class="issueType"><%= issue.issueType %></span> 
 <% if (issue.status == 'todo') { %> <i class="fa fa-lightbulb-o" style="color: lightgray"></i> <% } %> 
 <% if (issue.status == 'doing') { %> <i class="fa fa-clock-o" style="color: rgb(58, 203, 255)"></i> <% } %> 
 <% if (issue.status == 'done') { %> <i class="fa fa-check" style="color: lightgreen"></i> <% } %> 
 <span class="attribute">id</span>=<span class="value">"<%= issue.key %>"</span> 
 <span class="attribute">title</span>=<span class="value">"<%= issue.title %>"</span> 
 <span class="attribute">estimation</span>=<span class="value">"<%= issue.estimation %>"</span> 
-<a href="/project/<%= project.key %>/issue/<%= issue.key %>">...</a>
+<a href="/project/<%= project.key %>/issue/<%= issue.key %>">...</a></div>
