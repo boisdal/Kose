@@ -1,0 +1,1 @@
+$('#versionNavLink').addClass('active')

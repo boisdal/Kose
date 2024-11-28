@@ -1,0 +1,1 @@
+$('#issueNavLink').addClass('active')

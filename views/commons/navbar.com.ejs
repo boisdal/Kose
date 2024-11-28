@@ -13,16 +13,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-            <a class="nav-link" href="/project/<%= currentProjectKey %>">Home</a>
+                <a id="projectNavLink" class="nav-link<%- currentProjectKey ? '' : ' disabled' %>" href="/project/<%= currentProjectKey %>">Home</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="/project/<%= currentProjectKey %>/backlog">Backlog</a>
+                <a id="backlogNavLink" class="nav-link<%- currentProjectKey ? '' : ' disabled' %>" href="/project/<%= currentProjectKey %>/backlog">Backlog</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="/project/<%= currentProjectKey %>/version">Versions</a>
+                <a id="versionNavLink" class="nav-link<%- currentProjectKey ? '' : ' disabled' %>" href="/project/<%= currentProjectKey %>/version">Versions</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="/project/<%= currentProjectKey %>/issue">Issues</a>
+                <a id="issueNavLink" class="nav-link<%- currentProjectKey ? '' : ' disabled' %>" href="/project/<%= currentProjectKey %>/issue">Issues</a>
             </li>
         </ul>
     </div>

@@ -1,0 +1,1 @@
+$('#projectNavLink').addClass('active')

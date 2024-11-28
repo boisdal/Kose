@@ -1,0 +1,1 @@
+$('#backlogNavLink').addClass('active')
