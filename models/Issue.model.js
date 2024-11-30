@@ -36,7 +36,7 @@ const IssueSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    required: false,
   },
   estimation: {
     type: Number,

@@ -104,3 +104,50 @@ div.issue-text.parent-choice:hover {
     margin-left: -2px;
     cursor: pointer;
 }
+
+input.slick {
+    all: unset;
+    min-width: 10px;
+}
+
+span.hidden-input {
+    display: none;
+    white-space: pre;
+}
+
+div.input-holder {
+    display: contents;
+}
+
+.issueType input.slick::placeholder {
+    color: #409cd6;
+}
+
+.value input.slick::placeholder {
+    color: #ce9178;
+}
+
+.fa-option {
+    font-family: 'FontAwesome';
+    background-color: #212529;
+    border: none;
+    color: lightgray;
+    cursor: pointer;
+}
+
+.fa-option.todo-option {
+    color: lightgray!important;
+}
+
+.fa-option.doing-option {
+    color: rgb(58, 203, 255)!important;
+}
+
+.fa-option.done-option {
+    color: lightgreen!important;
+}
+
+i.send-button {
+    cursor: pointer;
+    color: lightgreen;
+}

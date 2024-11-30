@@ -1,4 +1,4 @@
-<div class="issue-text"><span class="issueType"><%= issue.issueType %></span> 
+<div class="issue-text" data-issue-key="<%= issue.key %>"><span class="issueType"><%= issue.issueType %></span> 
 <% if (issue.status == 'todo') { %> <i class="fa fa-lightbulb-o" style="color: lightgray"></i> <% } %> 
 <% if (issue.status == 'doing') { %> <i class="fa fa-clock-o" style="color: rgb(58, 203, 255)"></i> <% } %> 
 <% if (issue.status == 'done') { %> <i class="fa fa-check" style="color: lightgreen"></i> <% } %> 

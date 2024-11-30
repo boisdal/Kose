@@ -11,4 +11,4 @@ $('.fold-button').on('click', (e) => {
     return false
 })
 
-$('.fa-check').parent().find('.fa-chevron-down').click()
+$('.fa-check').parent().parent().find('.fa-chevron-down').click()
