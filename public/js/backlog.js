@@ -11,34 +11,41 @@ const bindAddButton = function() {
             $('.parent-choice').off('click')
             $('.parent-choice').removeClass('parent-choice')
             $('#newIssueZone').hide()
+            let projectKey = $('#kose-metadata').attr('data-projectKey')
             if (parentKey == 'new') {
-                $.get(`/project/kose/issue/newform`, function(data) {
+                $.get(`/project/${projectKey}/issue/newform`, function(data) {
                     let form = $(data)
                     $('.backlog-root').find('div').first().children().last().after(form)
                     updateInputSize()
                     form.find('.send-button').on('click', (e) => {
-                        bindSendButton(e, parentKey)
+                        sendButtonAction(e, parentKey)
                     })
+                    form.find('.slick').first().trigger('focus')
+                    bindEnterKeyToSendButton(form)
                 })
             } else {
                 let potentialAddingZone = parent.parent().closest('.issue-root')
                 if ((potentialAddingZone.find('.issue-root').length > 0)) {
-                    $.get(`/project/kose/issue/newform`, function(data) {
+                    $.get(`/project/${projectKey}/issue/newform`, function(data) {
                         let form = $(data)
                         potentialAddingZone.children('.issue-root').last().after(form)
                         updateInputSize()
                         form.find('.send-button').on('click', (e) => {
-                            bindSendButton(e, parentKey)
+                            sendButtonAction(e, parentKey)
                         })
+                        form.find('.slick').first().trigger('focus')
+                        bindEnterKeyToSendButton(form)
                     })
-                } else {//TODO: récupérer clé projet dynamiquement
-                    $.get(`/project/kose/issue/${parentKey}/parentform`, function(data) {
+                } else {
+                    $.get(`/project/${projectKey}/issue/${parentKey}/parentform`, function(data) {
                         let issue = $(data)
                         potentialAddingZone.replaceWith(issue)
                         updateInputSize()
                         issue.find('.send-button').on('click', (e) => {
-                            bindSendButton(e, parentKey)
+                            sendButtonAction(e, parentKey)
                         })
+                        issue.find('.slick').first().trigger('focus')
+                        bindEnterKeyToSendButton(issue)
                     }) 
 
                 }
@@ -47,14 +54,33 @@ const bindAddButton = function() {
     })
 }
 
-const bindSendButton = function(e, parentKey) {
+const bindEnterKeyToSendButton = function(root) {
+    root.find('.slick').on('keyup', (e) => {
+        if (e.keyCode === 13) {
+            if ('ontouchstart' in document.documentElement) {
+                input = $(e.target)
+                if (input.attr('enterkeyhint') == 'next') {
+                    input.parent().parent().nextAll('.hasInput').find('.slick').first().trigger('focus')
+                } else {
+                    // input.trigger('blur')
+                    root.find('.send-button').click()
+                }
+            } else {
+                root.find('.send-button').click()
+            }
+        }
+    })
+}
+
+const sendButtonAction = function(e, parentKey) {
+    let projectKey = $('#kose-metadata').attr('data-projectKey')
     let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
     let issueText = $(e.target).parent()
-    let issueType = issueText.find('.slick[placeholder="userstory"]').val()
+    let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
     let issueStatus = issueText.find('.fa-option').val()
-    let issueTitle = issueText.find('.slick[placeholder="title"]').val()
-    let issueEstimation = issueText.find('.slick[placeholder="5"]').val()
-    $.post('/project/kose/issue/new', {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
+    let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
+    let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
+    $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
         $('.backlog-root').replaceWith(data)
         await bindFolding()
         $('.fa-check').parent().parent().find('.fa-chevron-down').click()
