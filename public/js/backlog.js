@@ -6,6 +6,7 @@ const bindAddButton = function() {
         $('#newIssueZone').addClass('parent-choice')
         $('#newIssueZone').show()
         $('.parent-choice').on('click', (e) => {
+            $(e.target).closest('.issue-container').find('.folded-chevron').click()
             let parent = $(e.target).closest('div')
             let parentKey = parent.attr('data-issue-key')
             $('.parent-choice').off('click')
