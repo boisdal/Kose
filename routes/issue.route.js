@@ -43,8 +43,12 @@ router.post('/:projectKey/issue/new', ensureAuth, async (req, res) => {
     issueType: req.body.type,
     status: req.body.status
   }
-  let newIssue = await Issue.create(newIssueJson)
-  console.log(newIssue)
+  await Issue.create(newIssueJson)
+  let rootIssueList = await Issue.find({projectId: project._id, parentIssue: null})
+    for (let rootIssue of rootIssueList) {
+      await populateIssueChildren(rootIssue)
+    }
+    res.render('partials/backlog.part.ejs', {project: project, rootIssueList: rootIssueList})
 })
 
 module.exports = router

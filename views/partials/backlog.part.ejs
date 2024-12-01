@@ -1,0 +1,10 @@
+<div class="backlogRoot p-3">
+    <h1>Backlog de <%= project.name %></h1>
+    <div class="p-2" style="margin-left: -2rem;">
+        <% for (let issue of rootIssueList){ %>
+            <%- include('../partials/issue.part.ejs', {issue: issue, project: project}) %>
+        <% } %>
+    </div>
+    <div id="newIssueZone" style="display: none;" data-issue-key="new"></div>
+    <button id="newIssueButton" type="button" class="btn btn-outline-success mt-3"><i class="fa fa-plus"></i></button>
+</div>
