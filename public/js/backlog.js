@@ -11,32 +11,53 @@ const bindAddButton = function() {
             $('.parent-choice').off('click')
             $('.parent-choice').removeClass('parent-choice')
             $('#newIssueZone').hide()
-            let potentialAddingZone = parent.parent().closest('.issue-root')
-            if ((potentialAddingZone.find('.issue-root').length > 0)) {
-                $.get(`/project/kose/issue/newform`, function (data) {
+            if (parentKey == 'new') {
+                $.get(`/project/kose/issue/newform`, function(data) {
                     let form = $(data)
-                    potentialAddingZone.children('.issue-root').last().after(form)
+                    $('.backlog-root').find('div').first().children().last().after(form)
                     updateInputSize()
                     form.find('.send-button').on('click', (e) => {
                         bindSendButton(e, parentKey)
                     })
                 })
             } else {
-                $.get(`/project/kose/issue/${parentKey}/parentform`) //TODO: récupérer clé projet dynamiquement
+                let potentialAddingZone = parent.parent().closest('.issue-root')
+                if ((potentialAddingZone.find('.issue-root').length > 0)) {
+                    $.get(`/project/kose/issue/newform`, function(data) {
+                        let form = $(data)
+                        potentialAddingZone.children('.issue-root').last().after(form)
+                        updateInputSize()
+                        form.find('.send-button').on('click', (e) => {
+                            bindSendButton(e, parentKey)
+                        })
+                    })
+                } else {//TODO: récupérer clé projet dynamiquement
+                    $.get(`/project/kose/issue/${parentKey}/parentform`, function(data) {
+                        let issue = $(data)
+                        potentialAddingZone.replaceWith(issue)
+                        updateInputSize()
+                        issue.find('.send-button').on('click', (e) => {
+                            bindSendButton(e, parentKey)
+                        })
+                    }) 
+
+                }
             }
         })
     })
 }
 
 const bindSendButton = function(e, parentKey) {
+    let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
     let issueText = $(e.target).parent()
     let issueType = issueText.find('.slick[placeholder="userstory"]').val()
     let issueStatus = issueText.find('.fa-option').val()
     let issueTitle = issueText.find('.slick[placeholder="title"]').val()
     let issueEstimation = issueText.find('.slick[placeholder="5"]').val()
-    $.post('/project/kose/issue/new', {parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
-        $('.backlogRoot').replaceWith(data)
-        bindFolding()
+    $.post('/project/kose/issue/new', {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
+        $('.backlog-root').replaceWith(data)
+        await bindFolding()
+        $('.fa-check').parent().parent().find('.fa-chevron-down').click()
         bindAddButton()
     })
 }
@@ -62,8 +83,8 @@ const optionUpdate = function(e) {
     if (newState == 'done') {$(e).addClass('done-option')}
 }
 
-const bindFolding = function() {
-    $('.fold-button').on('click', (e) => {
+const bindFolding = async function() {
+    await $('.fold-button').on('click', (e) => {
         if (e.target.classList.contains('folded-chevron')) {
             $(e.target.parentElement.parentElement).children('.issue-root').removeClass('hidden-issue')
             $(e.target.parentElement).children('.bar').removeClass('hidden-bar')

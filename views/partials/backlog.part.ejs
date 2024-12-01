@@ -1,5 +1,4 @@
-<div class="backlogRoot p-3">
-    <h1>Backlog de <%= project.name %></h1>
+<div class="backlog-root">
     <div class="p-2" style="margin-left: -2rem;">
         <% for (let issue of rootIssueList){ %>
             <%- include('../partials/issue.part.ejs', {issue: issue, project: project}) %>

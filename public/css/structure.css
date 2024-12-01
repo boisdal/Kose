@@ -70,7 +70,7 @@
     transition: transform 100ms ease-in-out;
 }
 
-.backlogRoot {
+.backlog-root {
     width: fit-content;
 }
 
