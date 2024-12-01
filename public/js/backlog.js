@@ -16,7 +16,11 @@ const bindAddButton = function() {
             if (parentKey == 'new') {
                 $.get(`/project/${projectKey}/issue/newform`, function(data) {
                     let form = $(data)
-                    $('.backlog-root').find('div').first().children().last().after(form)
+                    if ($('.backlog-root').find('div').first().children().length > 0) {
+                       $('.backlog-root').find('div').first().children().last().after(form) 
+                    } else {
+                        $('.backlog-root').find('div').first().append(form)
+                    }
                     updateInputSize()
                     form.find('.send-button').on('click', (e) => {
                         sendButtonAction(e, parentKey)
