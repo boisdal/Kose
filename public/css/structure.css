@@ -51,7 +51,7 @@
 }
 
 .hidden-bar {
-    display: none;
+    display: none!important;
 }
 
 .fold-button {
