@@ -151,3 +151,8 @@ i.send-button {
     cursor: pointer;
     color: lightgreen;
 }
+
+i.cancel-button {
+    cursor: pointer;
+    color: rgb(252, 99, 99);
+}

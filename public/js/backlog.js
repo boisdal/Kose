@@ -25,8 +25,12 @@ const bindAddButton = function() {
                     form.find('.send-button').on('click', (e) => {
                         sendButtonAction(e, parentKey)
                     })
+                    form.find('.cancel-button').on('click', (e) => {
+                        cancelButtonAction(e)
+                    })
                     form.find('.slick').first().trigger('focus')
                     bindEnterKeyToSendButton(form)
+                    bindDeleteKeyToDeleteButton(form)
                 })
             } else {
                 let potentialAddingZone = parent.parent().closest('.issue-root')
@@ -38,8 +42,12 @@ const bindAddButton = function() {
                         form.find('.send-button').on('click', (e) => {
                             sendButtonAction(e, parentKey)
                         })
+                        form.find('.cancel-button').on('click', (e) => {
+                            cancelButtonAction(e)
+                        })
                         form.find('.slick').first().trigger('focus')
                         bindEnterKeyToSendButton(form)
+                        bindDeleteKeyToDeleteButton(form)
                     })
                 } else {
                     $.get(`/project/${projectKey}/issue/${parentKey}/parentform`, function(data) {
@@ -49,8 +57,12 @@ const bindAddButton = function() {
                         issue.find('.send-button').on('click', (e) => {
                             sendButtonAction(e, parentKey)
                         })
+                        issue.find('.cancel-button').on('click', (e) => {
+                            cancelButtonAction(e)
+                        })
                         issue.find('.slick').first().trigger('focus')
                         bindEnterKeyToSendButton(issue)
+                        bindDeleteKeyToDeleteButton(issue)
                     }) 
 
                 }
@@ -77,6 +89,14 @@ const bindEnterKeyToSendButton = function(root) {
     })
 }
 
+const bindDeleteKeyToDeleteButton = function(root) {
+    root.find('.slick').on('keyup', (e) => {
+        if (e.keyCode === 46) {
+            root.find('.cancel-button').click()
+        }
+    })
+}
+
 const sendButtonAction = function(e, parentKey) {
     let projectKey = $('#kose-metadata').attr('data-projectKey')
     let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
@@ -91,6 +111,11 @@ const sendButtonAction = function(e, parentKey) {
         $('.fa-check').parent().parent().find('.fa-chevron-down').click()
         bindAddButton()
     })
+}
+
+const cancelButtonAction = function(e) {
+    let issueRoot = $(e.target).parent().parent()
+    issueRoot.remove()
 }
 
 const updateInputSize = function() {
