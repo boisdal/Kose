@@ -52,7 +52,9 @@ const bindAddButton = function() {
                 } else {
                     $.get(`/project/${projectKey}/issue/${parentKey}/parentform`, function(data) {
                         let issue = $(data)
+                        let oldIssue = potentialAddingZone[0].outerHTML
                         potentialAddingZone.replaceWith(issue)
+                        issue.attr('old-issue', oldIssue)
                         updateInputSize()
                         issue.find('.send-button').on('click', (e) => {
                             sendButtonAction(e, parentKey)
@@ -115,7 +117,13 @@ const sendButtonAction = function(e, parentKey) {
 
 const cancelButtonAction = function(e) {
     let issueRoot = $(e.target).parent().parent()
+    let parentRoot = issueRoot.parent().closest('.issue-root')
     issueRoot.remove()
+    console.log()
+    if (parentRoot.find('.issue-root').length == 0) {
+        console.log('test')
+        parentRoot.replaceWith($(parentRoot.attr('old-issue')))
+    }
 }
 
 const updateInputSize = function() {
