@@ -109,9 +109,7 @@ const sendButtonAction = function(e, parentKey) {
     let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
     $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
         $('.backlog-root').replaceWith(data)
-        await bindFolding()
-        $('.fa-check').parent().parent().find('.fa-chevron-down').click()
-        bindAddButton()
+        bindAllShit()
     })
 }
 
@@ -121,7 +119,6 @@ const cancelButtonAction = function(e) {
     issueRoot.remove()
     console.log()
     if (parentRoot.find('.issue-root').length == 0) {
-        console.log('test')
         parentRoot.replaceWith($(parentRoot.attr('old-issue')))
     }
 }
@@ -162,9 +159,55 @@ const bindFolding = async function() {
     })
 }
 
-bindFolding()
-bindAddButton()
+const bindEditAllButton = function() {
+    // TODO:
+}
 
-$('.fa-check').parent().parent().find('.fa-chevron-down').click()
+const bindSendAllButton = function() {
+    $('#sendAllButton').on('click', async () => {
+        nbOfForms = $('.send-button').length
+        for (let [i, e] of document.querySelectorAll('.send-button').entries()) {
+            let parentKey = $(e).closest('.issue-root').parent().children('.issue-container').children('.issue-text').attr('data-issue-key')
+            let projectKey = $('#kose-metadata').attr('data-projectKey')
+            let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
+            let issueText = $(e).parent()
+            let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
+            let issueStatus = issueText.find('.fa-option').val()
+            let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
+            let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
+            await $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
+                if (i == nbOfForms - 1) {
+                    // Only if last form in list should it refresh and rebind
+                    $('.backlog-root').replaceWith(data)
+                    bindAllShit()
+                }
+            })
+        }
+    })
+}
 
-$('html').on('input', updateInputSize)
+const bindCancelAllButton = function() {
+    $('#cancelAllButton').on('click', async () => {
+        $('.cancel-button').each((i, e) => {
+            let issueRoot = $(e).parent().parent()
+            let parentRoot = issueRoot.parent().closest('.issue-root')
+            issueRoot.remove()
+            console.log()
+            if (parentRoot.find('.issue-root').length == 0) {
+                parentRoot.replaceWith($(parentRoot.attr('old-issue')))
+            }
+        })
+    })
+}
+
+const bindAllShit = function() {
+    bindFolding()
+    bindAddButton()
+    bindEditAllButton()
+    bindSendAllButton()
+    bindCancelAllButton()
+    $('.fa-check').parent().parent().find('.fa-chevron-down').click()
+    $('html').on('input', updateInputSize)
+}
+
+bindAllShit()
