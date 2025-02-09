@@ -1,0 +1,7 @@
+<div class="issue-text" data-issue-key="issue-form"><span class="issueType hasInput"><div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="userstory"value="<%= issue.issueType %>"  enterkeyhint="next"></div></span> 
+<select class="fa-option" onchange="optionUpdate(this)"><option selected value="todo" class="fa-option todo-option">&#xf0eb;</option><option value="doing" class="fa-option doing-option">&#xf017;</option><option value="done" class="fa-option done-option">&#xf00c;</option></select>
+<span class="attribute">id</span>=<span class="value">"<%= issue.key %>"</span> 
+<span class="attribute">title</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="title" value="<%= issue.title %>" enterkeyhint="next"></div>"</span> 
+<span class="attribute">sp</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="5" value="<%= issue.estimation %>" enterkeyhint="send"></div>"</span> 
+<i class="fa fa-xl fa-check-square-o send-button"></i>
+<i class="fa fa-xl fa-times cancel-button"></i></div><span class="bracket">&#47;&gt;</span>

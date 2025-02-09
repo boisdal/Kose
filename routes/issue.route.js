@@ -11,7 +11,7 @@ router.get('/:projectKey/issue', ensureAuth, async (req, res) => {
 })
 
 router.get('/:projectKey/issue/newform', ensureAuth, async (req, res) => {
-  res.render('partials/issueForm.part.ejs')
+  res.render('partials/newIssueForm.part.ejs')
 })
 
 router.get('/:projectKey/issue/:issueKey/parentform', ensureAuth, async (req, res) => {
@@ -50,6 +50,40 @@ router.post('/:projectKey/issue/new', ensureAuth, async (req, res) => {
     newIssueJson.parentIssue = parent._id
   }
   await Issue.create(newIssueJson)
+  let rootIssueKey = Number(req.body.rootIssueKey)
+  if (rootIssueKey == -1) {
+    let rootIssueList = await Issue.find({projectId: project._id, parentIssue: null})
+      for (let rootIssue of rootIssueList) {
+        await populateIssueChildren(rootIssue)
+      }
+    res.render('partials/backlog.part.ejs', {project: project, rootIssueList: rootIssueList})
+  } else {
+    let rootIssue = await Issue.findOne({projectId: project._id, key: rootIssueKey})
+    await populateIssueChildren(rootIssue)
+    res.render('partials/backlog.part.ejs', {project: project, rootIssueList: [rootIssue]})
+  }
+})
+
+router.get('/:projectKey/issue/:issueKey/geteditform', ensureAuth, async (req, res) => {
+  let projectKey = req.params.projectKey
+  let project = await Project.findOne({key: projectKey})
+  let issueKey = req.params.issueKey
+  let issue = await Issue.findOne({projectId: project._id, key: issueKey})
+  res.render('partials/issueEditForm.part.ejs', {issue: issue})
+})
+
+router.post('/:projectKey/issue/:issueKey/edit', ensureAuth, async (req, res) => {
+  let project = await Project.findOne({key: req.params.projectKey})
+  let issueKey = req.params.issueKey
+  let updatedIssueJson = {
+    key: issueKey,
+    title: req.body.title,
+    estimation: Number(req.body.estimation),
+    issueType: req.body.type,
+    status: req.body.status
+  }
+  // TODO: si issue a des child, propager le changement de statut si fini. Voir comment gérer le en cours.
+  await Issue.updateOne({projectId: project._id, key: Number(issueKey)}, {$set: updatedIssueJson})
   let rootIssueKey = Number(req.body.rootIssueKey)
   if (rootIssueKey == -1) {
     let rootIssueList = await Issue.find({projectId: project._id, parentIssue: null})

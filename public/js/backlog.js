@@ -16,21 +16,9 @@ const bindAddButton = function() {
             if (parentKey == 'new') {
                 $.get(`/project/${projectKey}/issue/newform`, function(data) {
                     let form = $(data)
-                    if ($('.backlog-root').find('div').first().children().length > 0) {
-                       $('.backlog-root').find('div').first().children().last().after(form) 
-                    } else {
-                        $('.backlog-root').find('div').first().append(form)
-                    }
+                    $('.backlog-root').find('div').first().append(form)
                     updateInputSize()
-                    form.find('.send-button').on('click', (e) => {
-                        sendButtonAction(e, parentKey)
-                    })
-                    form.find('.cancel-button').on('click', (e) => {
-                        cancelButtonAction(e)
-                    })
-                    form.find('.slick').first().trigger('focus')
-                    bindEnterKeyToSendButton(form)
-                    bindDeleteKeyToDeleteButton(form)
+                    bindNewIssueFormButtons(form, parentKey)
                 })
             } else {
                 let potentialAddingZone = parent.parent().closest('.issue-root')
@@ -39,38 +27,52 @@ const bindAddButton = function() {
                         let form = $(data)
                         potentialAddingZone.children('.issue-root').last().after(form)
                         updateInputSize()
-                        form.find('.send-button').on('click', (e) => {
-                            sendButtonAction(e, parentKey)
-                        })
-                        form.find('.cancel-button').on('click', (e) => {
-                            cancelButtonAction(e)
-                        })
-                        form.find('.slick').first().trigger('focus')
-                        bindEnterKeyToSendButton(form)
-                        bindDeleteKeyToDeleteButton(form)
+                        bindNewIssueFormButtons(form, parentKey)
                     })
                 } else {
                     $.get(`/project/${projectKey}/issue/${parentKey}/parentform`, function(data) {
                         let issue = $(data)
+                        let form = issue.find('.issue-root')
                         let oldIssue = potentialAddingZone[0].outerHTML
                         potentialAddingZone.replaceWith(issue)
                         issue.attr('old-issue', oldIssue)
                         updateInputSize()
-                        issue.find('.send-button').on('click', (e) => {
-                            sendButtonAction(e, parentKey)
-                        })
-                        issue.find('.cancel-button').on('click', (e) => {
-                            cancelButtonAction(e)
-                        })
-                        issue.find('.slick').first().trigger('focus')
-                        bindEnterKeyToSendButton(issue)
-                        bindDeleteKeyToDeleteButton(issue)
+                        bindNewIssueFormButtons(form, parentKey)
                     }) 
 
                 }
             }
         })
     })
+}
+
+const bindNewIssueFormButtons = function(form, parentKey) {
+    form.find('.send-button').on('click', (e) => {
+        let projectKey = $('#kose-metadata').attr('data-projectKey')
+        let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
+        let issueText = $(e.target).parent()
+        let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
+        let issueStatus = issueText.find('.fa-option').val()
+        let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
+        let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
+        $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
+            $('.backlog-root').replaceWith(data)
+            bindAllShit()
+        })
+    })
+    form.find('.cancel-button').on('click', (e) => {
+        let issueRoot = $(e.target).parent().parent()
+        // TODO: checker si cancel d'un edit (old-issue-text)
+        let parentRoot = issueRoot.parent().closest('.issue-root')
+        issueRoot.remove()
+        console.log()
+        if (parentRoot.find('.issue-root').length == 0) {
+            parentRoot.replaceWith($(parentRoot.attr('old-issue')))
+        }
+    })
+    form.find('.slick').first().trigger('focus')
+    bindEnterKeyToSendButton(form)
+    bindDeleteKeyToCancelButton(form)
 }
 
 const bindEnterKeyToSendButton = function(root) {
@@ -91,36 +93,12 @@ const bindEnterKeyToSendButton = function(root) {
     })
 }
 
-const bindDeleteKeyToDeleteButton = function(root) {
+const bindDeleteKeyToCancelButton = function(root) {
     root.find('.slick').on('keyup', (e) => {
         if (e.keyCode === 46) {
             root.find('.cancel-button').click()
         }
     })
-}
-
-const sendButtonAction = function(e, parentKey) {
-    let projectKey = $('#kose-metadata').attr('data-projectKey')
-    let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
-    let issueText = $(e.target).parent()
-    let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
-    let issueStatus = issueText.find('.fa-option').val()
-    let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
-    let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
-    $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
-        $('.backlog-root').replaceWith(data)
-        bindAllShit()
-    })
-}
-
-const cancelButtonAction = function(e) {
-    let issueRoot = $(e.target).parent().parent()
-    let parentRoot = issueRoot.parent().closest('.issue-root')
-    issueRoot.remove()
-    console.log()
-    if (parentRoot.find('.issue-root').length == 0) {
-        parentRoot.replaceWith($(parentRoot.attr('old-issue')))
-    }
 }
 
 const updateInputSize = function() {
@@ -175,7 +153,8 @@ const bindSendAllButton = function() {
             let issueStatus = issueText.find('.fa-option').val()
             let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
             let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
-            await $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
+            // TODO: séparer le cas edit du cas new 
+            await $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
                 if (i == nbOfForms - 1) {
                     // Only if last form in list should it refresh and rebind
                     $('.backlog-root').replaceWith(data)
@@ -200,13 +179,46 @@ const bindCancelAllButton = function() {
     })
 }
 
-const bindAllShit = function() {
+const bindEditButton = function() {
+    let projectKey = $('#kose-metadata').attr('data-projectKey')
+    $('.edit-button').on('click', (e) => {
+        let issueText = $(e.target).parent('.issue-text')
+        // TODO: ajout du old-issue-text dans les data de l'element
+        let key = issueText.attr('data-issue-key')
+        $.get(`/project/${projectKey}/issue/${key}/geteditform`, function(data) {
+            let newIssueText = $(data)
+            issueText.replaceWith(newIssueText)
+            updateInputSize()
+            newIssueText.find('.send-button').on('click', async (e) => {
+                let projectKey = $('#kose-metadata').attr('data-projectKey')
+                let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
+                let issueText = $(e.target).parent()
+                let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
+                let issueStatus = issueText.find('.fa-option').val()
+                let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
+                let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
+                await $.post(`/project/${projectKey}/issue/${key}/edit`, {rootIssueKey: rootIssueKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
+                    $('.backlog-root').replaceWith(data)
+                    bindAllShit()
+                })
+            })
+        })
+    })
+}
+
+const bindDeleteButton = function() {
+    // TODO:
+}
+
+const bindAllShit = function() { // TODO: faire une passe pour utiliser cette fonction au max (s'assurer de pas de double bind)
+    bindDeleteButton()
+    bindEditButton()
     bindFolding()
     bindAddButton()
     bindEditAllButton()
     bindSendAllButton()
     bindCancelAllButton()
-    $('.fa-check').parent().parent().find('.fa-chevron-down').click()
+    $('.fa-check').parent().parent().find('.fa-chevron-down').click() // TODO: trouver mieux
     $('html').on('input', updateInputSize)
 }
 
