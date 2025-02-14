@@ -69,6 +69,7 @@ router.get('/:projectKey/issue/:issueKey/geteditform', ensureAuth, async (req, r
   let project = await Project.findOne({key: projectKey})
   let issueKey = req.params.issueKey
   let issue = await Issue.findOne({projectId: project._id, key: issueKey})
+  await populateIssueChildren(issue)
   res.render('partials/issueEditForm.part.ejs', {issue: issue})
 })
 
