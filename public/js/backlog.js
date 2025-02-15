@@ -110,7 +110,7 @@ const bindFolding = async function() {
 const bindEditAllButton = function() {
     $('#editAllButton').off('click')
     $('#editAllButton').on('click', async () => {
-        // TODO:
+        $('.edit-button').click()
     })
 }
 
