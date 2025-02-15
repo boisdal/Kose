@@ -47,19 +47,6 @@ const bindAddButton = function() {
 }
 
 const bindNewIssueFormButtons = function(form, parentKey) {
-    form.find('.send-button').on('click', (e) => {
-        let projectKey = $('#kose-metadata').attr('data-projectKey')
-        let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
-        let issueText = $(e.target).parent()
-        let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
-        let issueStatus = issueText.find('.fa-option').val()
-        let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
-        let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
-        $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, async function(data) {
-            $('.backlog-root').replaceWith(data)
-            bindAllShit()
-        })
-    })
     form.find('.cancel-button').on('click', (e) => {
         let issueRoot = $(e.target).parent().parent()
         // TODO: checker si cancel d'un edit (old-issue-text)
@@ -75,7 +62,7 @@ const bindNewIssueFormButtons = function(form, parentKey) {
     bindDeleteKeyToCancelButton(form)
 }
 
-const bindEnterKeyToSendButton = function(root) {
+const bindEnterKeyToSendButton = function(root) { // TODO: globaliser la gestion de ce raccourci. Mettre dans le bindAllShit.
     root.find('.slick').on('keyup', (e) => {
         if (e.keyCode === 13) {
             if ('ontouchstart' in document.documentElement) {
@@ -84,10 +71,10 @@ const bindEnterKeyToSendButton = function(root) {
                     input.parent().parent().nextAll('.hasInput').find('.slick').first().trigger('focus')
                 } else {
                     // input.trigger('blur')
-                    root.find('.send-button').click()
+                    $('#sendAllButton').click()
                 }
             } else {
-                root.find('.send-button').click()
+                $('#sendAllButton').click()
             }
         }
     })
@@ -143,9 +130,10 @@ const bindEditAllButton = function() {
 
 const bindSendAllButton = function() {
     $('#sendAllButton').on('click', async () => {
-        nbOfForms = $('.send-button').length
-        for (let [i, e] of document.querySelectorAll('.send-button').entries()) {
-            let parentKey = $(e).closest('.issue-root').parent().children('.issue-container').children('.issue-text').attr('data-issue-key')
+        nbOfForms = $('.cancel-button').length
+        // console.log(`Sending all forms currently in edition : ${nbOfForms} forms to send.`)
+        for (let [i, e] of document.querySelectorAll('.cancel-button').entries()) {
+            let parentKey = $(e).closest('.issue-root').parent().children('.issue-container').children('.issue-text').attr('data-issue-key') || 'new'
             let projectKey = $('#kose-metadata').attr('data-projectKey')
             let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
             let issueText = $(e).parent()
@@ -153,14 +141,29 @@ const bindSendAllButton = function() {
             let issueStatus = issueText.find('.fa-option').val()
             let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
             let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
-            // TODO: séparer le cas edit du cas new 
-            await $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
-                if (i == nbOfForms - 1) {
-                    // Only if last form in list should it refresh and rebind
-                    $('.backlog-root').replaceWith(data)
-                    bindAllShit()
-                }
-            })
+            let formType = issueText.attr('data-form-type')
+            if (formType == 'new') {
+                await $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
+                    if (i == nbOfForms - 1) {
+                        // Only if last form in list should it refresh and rebind
+                        $('.backlog-root').replaceWith(data)
+                        bindAllShit()
+                    }
+                })
+            }
+            else if (formType == 'edit') {
+                let issueKey = issueText.attr('data-issue-key')
+                await $.post(`/project/${projectKey}/issue/${issueKey}/edit`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
+                    if (i == nbOfForms - 1) {
+                        // Only if last form in list should it refresh and rebind
+                        $('.backlog-root').replaceWith(data)
+                        bindAllShit()
+                    }
+                })
+            }
+            else {
+                console.log(`form type not supported : ${formType}`)
+            }
         }
     })
 }
@@ -177,7 +180,7 @@ const bindCancelAllButton = function() {
             }
         })
     })
-}
+}           
 
 const bindEditButton = function() {
     let projectKey = $('#kose-metadata').attr('data-projectKey')
@@ -189,18 +192,8 @@ const bindEditButton = function() {
             let newIssueText = $(data)
             issueText.replaceWith(newIssueText)
             updateInputSize()
-            newIssueText.find('.send-button').on('click', async (e) => {
-                let projectKey = $('#kose-metadata').attr('data-projectKey')
-                let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
-                let issueText = $(e.target).parent()
-                let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
-                let issueStatus = issueText.find('.fa-option').val()
-                let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
-                let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
-                await $.post(`/project/${projectKey}/issue/${key}/edit`, {rootIssueKey: rootIssueKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
-                    $('.backlog-root').replaceWith(data)
-                    bindAllShit()
-                })
+            newIssueText.find('.cancel-button').on('click', async (e) => {
+                // TODO:
             })
         })
     })

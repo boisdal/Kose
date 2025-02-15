@@ -30,6 +30,7 @@ router.get('/:projectKey/issue/:issueKey', ensureAuth, async (req, res) => {
 })
 
 router.post('/:projectKey/issue/new', ensureAuth, async (req, res) => {
+  console.log(req.body)
   //TODO: Ajouter vérifications des valeurs saisies / sanitize
   let project = await Project.findOne({key: req.params.projectKey})
   let newKey = 0
@@ -70,7 +71,7 @@ router.get('/:projectKey/issue/:issueKey/geteditform', ensureAuth, async (req, r
   let issueKey = req.params.issueKey
   let issue = await Issue.findOne({projectId: project._id, key: issueKey})
   await populateIssueChildren(issue)
-  res.render('partials/issueEditForm.part.ejs', {issue: issue})
+  res.render('partials/editIssueForm.part.ejs', {issue: issue})
 })
 
 router.post('/:projectKey/issue/:issueKey/edit', ensureAuth, async (req, res) => {
