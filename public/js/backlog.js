@@ -35,7 +35,7 @@ const bindAddButton = function() {
                         let form = issue.find('.issue-root')
                         let oldIssue = potentialAddingZone[0].outerHTML
                         potentialAddingZone.replaceWith(issue)
-                        issue.attr('old-issue', oldIssue)
+                        issue.attr('data-old-issue', oldIssue)
                         updateInputSize()
                         bindNewIssueFormButtons(form, parentKey)
                     }) 
@@ -54,7 +54,7 @@ const bindNewIssueFormButtons = function(form, parentKey) {
         issueRoot.remove()
         console.log()
         if (parentRoot.find('.issue-root').length == 0) {
-            parentRoot.replaceWith($(parentRoot.attr('old-issue')))
+            parentRoot.replaceWith($(parentRoot.attr('data-old-issue')))
         }
     })
     form.find('.slick').first().trigger('focus')
@@ -160,8 +160,7 @@ const bindSendAllButton = function() {
                         bindAllShit()
                     }
                 })
-            }
-            else {
+            } else {
                 console.log(`form type not supported : ${formType}`)
             }
         }
@@ -171,12 +170,21 @@ const bindSendAllButton = function() {
 const bindCancelAllButton = function() {
     $('#cancelAllButton').on('click', async () => {
         $('.cancel-button').each((i, e) => {
-            let issueRoot = $(e).parent().parent()
-            let parentRoot = issueRoot.parent().closest('.issue-root')
-            issueRoot.remove()
-            console.log()
-            if (parentRoot.find('.issue-root').length == 0) {
-                parentRoot.replaceWith($(parentRoot.attr('old-issue')))
+            let formType = $(e).parent().attr('data-form-type')
+            if (formType == 'new') {
+                let issueRoot = $(e).parent().parent()
+                let parentRoot = issueRoot.parent().closest('.issue-root')
+                issueRoot.remove()
+                console.log()
+                if (parentRoot.find('.issue-root').length == 0) {
+                    parentRoot.replaceWith($(parentRoot.attr('data-old-issue')))
+                }
+            } else if (formType == 'edit') {
+                canceledIssueText = $(e).closest('.issue-text')
+                canceledIssueText.replaceWith($(canceledIssueText.attr('data-old-issue-text')))
+                bindAllShit()
+            } else {
+                console.log(`form type not supported : ${formType}`)
             }
         })
     })
@@ -186,14 +194,17 @@ const bindEditButton = function() {
     let projectKey = $('#kose-metadata').attr('data-projectKey')
     $('.edit-button').on('click', (e) => {
         let issueText = $(e.target).parent('.issue-text')
-        // TODO: ajout du old-issue-text dans les data de l'element
+        let oldIssueText = issueText[0].outerHTML
         let key = issueText.attr('data-issue-key')
         $.get(`/project/${projectKey}/issue/${key}/geteditform`, function(data) {
             let newIssueText = $(data)
             issueText.replaceWith(newIssueText)
+            newIssueText.attr('data-old-issue-text', oldIssueText) 
             updateInputSize()
             newIssueText.find('.cancel-button').on('click', async (e) => {
-                // TODO:
+                canceledIssueText = $(e.target).closest('.issue-text')
+                canceledIssueText.replaceWith($(canceledIssueText.attr('data-old-issue-text')))
+                bindAllShit()
             })
         })
     })
