@@ -219,10 +219,23 @@ const bindCancelButton = function() {
 }
 
 const bindDeleteButton = function() {
-    // TODO:
+    let projectKey = $('#kose-metadata').attr('data-projectKey')
+    let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
+    $('.delete-button').off('click')
+    $('.delete-button').on('click', (e) => {
+        let issueText = $(e.target).closest('.issue-text')
+        let issueKey = issueText.attr('data-issue-key')
+        let issueTitle = issueText.find('.value').eq(1).text().replaceAll('"', '')
+        if (confirm(`Delete issue n°${issueKey} : ${issueTitle} ?`)) {
+            $.post(`/project/${projectKey}/issue/${issueKey}/delete`, {rootIssueKey: rootIssueKey}, function(data) {
+                $('.backlog-root').replaceWith(data)
+                bindAllShit()
+            })
+        }
+    })
 }
 
-const bindAllShit = function() { // TODO: faire une passe pour utiliser cette fonction au max (s'assurer de pas de double bind)
+const bindAllShit = function() {
     updateInputSize()
     bindEditButton()
     bindDeleteButton()

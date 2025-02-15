@@ -100,4 +100,24 @@ router.post('/:projectKey/issue/:issueKey/edit', ensureAuth, async (req, res) =>
   }
 })
 
+router.post('/:projectKey/issue/:issueKey/delete', ensureAuth, async (req, res) => {
+  let project = await Project.findOne({key: req.params.projectKey})
+  let issueKey = req.params.issueKey
+  let issue = await Issue.findOne({projectId: project._id, key: Number(issueKey)})
+  await Issue.deleteOne({projectId: project._id, key: Number(issueKey)})
+  await Issue.updateMany({projectId: project._id, parentIssue: issue._id}, {parentIssue: issue.parentIssue})
+  let rootIssueKey = Number(req.body.rootIssueKey)
+  if (rootIssueKey == -1) {
+    let rootIssueList = await Issue.find({projectId: project._id, parentIssue: null})
+      for (let rootIssue of rootIssueList) {
+        await populateIssueChildren(rootIssue)
+      }
+    res.render('partials/backlog.part.ejs', {project: project, rootIssueList: rootIssueList})
+  } else {
+    let rootIssue = await Issue.findOne({projectId: project._id, key: rootIssueKey})
+    await populateIssueChildren(rootIssue)
+    res.render('partials/backlog.part.ejs', {project: project, rootIssueList: [rootIssue]})
+  }
+})
+
 module.exports = router
