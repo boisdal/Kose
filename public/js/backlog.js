@@ -1,10 +1,12 @@
 $('#backlogNavLink').addClass('active')
 
 const bindAddButton = function() {
+    $('#newIssueButton').off('click')
     $('#newIssueButton').on('click', () => {
         $('.issue-text').addClass('parent-choice')
         $('#newIssueZone').addClass('parent-choice')
         $('#newIssueZone').show()
+        $('.parent-choice').off('click')
         $('.parent-choice').on('click', (e) => {
             $(e.target).closest('.issue-container').find('.folded-chevron').click()
             let parent = $(e.target).closest('div')
@@ -17,8 +19,8 @@ const bindAddButton = function() {
                 $.get(`/project/${projectKey}/issue/newform`, function(data) {
                     let form = $(data)
                     $('.backlog-root').find('div').first().append(form)
-                    updateInputSize()
-                    bindNewIssueFormButtons(form, parentKey)
+                    bindAllShit()
+                    form.find('.slick').first().trigger('focus')
                 })
             } else {
                 let potentialAddingZone = parent.parent().closest('.issue-root')
@@ -26,8 +28,8 @@ const bindAddButton = function() {
                     $.get(`/project/${projectKey}/issue/newform`, function(data) {
                         let form = $(data)
                         potentialAddingZone.children('.issue-root').last().after(form)
-                        updateInputSize()
-                        bindNewIssueFormButtons(form, parentKey)
+                        bindAllShit()
+                        form.find('.slick').first().trigger('focus')
                     })
                 } else {
                     $.get(`/project/${projectKey}/issue/${parentKey}/parentform`, function(data) {
@@ -36,8 +38,8 @@ const bindAddButton = function() {
                         let oldIssue = potentialAddingZone[0].outerHTML
                         potentialAddingZone.replaceWith(issue)
                         issue.attr('data-old-issue', oldIssue)
-                        updateInputSize()
-                        bindNewIssueFormButtons(form, parentKey)
+                        bindAllShit()
+                        form.find('.slick').first().trigger('focus')
                     }) 
 
                 }
@@ -46,24 +48,9 @@ const bindAddButton = function() {
     })
 }
 
-const bindNewIssueFormButtons = function(form, parentKey) {
-    form.find('.cancel-button').on('click', (e) => {
-        let issueRoot = $(e.target).parent().parent()
-        // TODO: checker si cancel d'un edit (old-issue-text)
-        let parentRoot = issueRoot.parent().closest('.issue-root')
-        issueRoot.remove()
-        console.log()
-        if (parentRoot.find('.issue-root').length == 0) {
-            parentRoot.replaceWith($(parentRoot.attr('data-old-issue')))
-        }
-    })
-    form.find('.slick').first().trigger('focus')
-    bindEnterKeyToSendButton(form)
-    bindDeleteKeyToCancelButton(form)
-}
-
-const bindEnterKeyToSendButton = function(root) { // TODO: globaliser la gestion de ce raccourci. Mettre dans le bindAllShit.
-    root.find('.slick').on('keyup', (e) => {
+const bindQuickSendDeleteKeys = function(root) {
+    $('.slick').off('keyup')
+    $('.slick').on('keyup', (e) => {
         if (e.keyCode === 13) {
             if ('ontouchstart' in document.documentElement) {
                 input = $(e.target)
@@ -77,11 +64,6 @@ const bindEnterKeyToSendButton = function(root) { // TODO: globaliser la gestion
                 $('#sendAllButton').click()
             }
         }
-    })
-}
-
-const bindDeleteKeyToCancelButton = function(root) {
-    root.find('.slick').on('keyup', (e) => {
         if (e.keyCode === 46) {
             root.find('.cancel-button').click()
         }
@@ -110,6 +92,7 @@ const optionUpdate = function(e) {
 }
 
 const bindFolding = async function() {
+    $('.fold-button').off('click')
     await $('.fold-button').on('click', (e) => {
         if (e.target.classList.contains('folded-chevron')) {
             $(e.target.parentElement.parentElement).children('.issue-root').removeClass('hidden-issue')
@@ -125,10 +108,14 @@ const bindFolding = async function() {
 }
 
 const bindEditAllButton = function() {
-    // TODO:
+    $('#editAllButton').off('click')
+    $('#editAllButton').on('click', async () => {
+        // TODO:
+    })
 }
 
 const bindSendAllButton = function() {
+    $('#sendAllButton').off('click')
     $('#sendAllButton').on('click', async () => {
         nbOfForms = $('.cancel-button').length
         // console.log(`Sending all forms currently in edition : ${nbOfForms} forms to send.`)
@@ -168,6 +155,7 @@ const bindSendAllButton = function() {
 }
 
 const bindCancelAllButton = function() {
+    $('#cancelAllButton').off('click')
     $('#cancelAllButton').on('click', async () => {
         $('.cancel-button').each((i, e) => {
             let formType = $(e).parent().attr('data-form-type')
@@ -182,16 +170,17 @@ const bindCancelAllButton = function() {
             } else if (formType == 'edit') {
                 canceledIssueText = $(e).closest('.issue-text')
                 canceledIssueText.replaceWith($(canceledIssueText.attr('data-old-issue-text')))
-                bindAllShit()
             } else {
                 console.log(`form type not supported : ${formType}`)
             }
         })
+        bindAllShit()
     })
 }           
 
 const bindEditButton = function() {
     let projectKey = $('#kose-metadata').attr('data-projectKey')
+    $('.edit-button').off('click')
     $('.edit-button').on('click', (e) => {
         let issueText = $(e.target).parent('.issue-text')
         let oldIssueText = issueText[0].outerHTML
@@ -201,12 +190,31 @@ const bindEditButton = function() {
             issueText.replaceWith(newIssueText)
             newIssueText.attr('data-old-issue-text', oldIssueText) 
             updateInputSize()
-            newIssueText.find('.cancel-button').on('click', async (e) => {
-                canceledIssueText = $(e.target).closest('.issue-text')
-                canceledIssueText.replaceWith($(canceledIssueText.attr('data-old-issue-text')))
-                bindAllShit()
-            })
+            bindAllShit()
         })
+    })
+}
+
+const bindCancelButton = function() {
+    $('.cancel-button').off('click')
+    $('.cancel-button').on('click', (e) => {
+        let formType = $(e.target).parent().attr('data-form-type')
+        if (formType == 'new') {
+            let issueRoot = $(e.target).parent().parent()
+            let parentRoot = issueRoot.parent().closest('.issue-root')
+            issueRoot.remove()
+            console.log()
+            if (parentRoot.find('.issue-root').length == 0) {
+                parentRoot.replaceWith($(parentRoot.attr('data-old-issue')))
+                bindAllShit()
+            }
+        } else if (formType == 'edit') {
+            canceledIssueText = $(e.target).closest('.issue-text')
+            canceledIssueText.replaceWith($(canceledIssueText.attr('data-old-issue-text')))
+            bindAllShit()
+        } else {
+            console.log(`form type not supported : ${formType}`)
+        }
     })
 }
 
@@ -215,13 +223,16 @@ const bindDeleteButton = function() {
 }
 
 const bindAllShit = function() { // TODO: faire une passe pour utiliser cette fonction au max (s'assurer de pas de double bind)
-    bindDeleteButton()
+    updateInputSize()
     bindEditButton()
+    bindDeleteButton()
+    bindCancelButton()
     bindFolding()
     bindAddButton()
     bindEditAllButton()
     bindSendAllButton()
     bindCancelAllButton()
+    bindQuickSendDeleteKeys()
     $('.fa-check').parent().parent().find('.fa-chevron-down').click() // TODO: trouver mieux
     $('html').on('input', updateInputSize)
 }
