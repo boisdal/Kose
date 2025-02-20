@@ -1,0 +1,5 @@
+<select class="fa-option" onchange="optionUpdate(this)">
+    <option <% if (issue.status == 'todo') { %>selected<% } %> value="todo" class="fa-option todo-option">&#xf0eb;</option>
+    <option <% if (issue.status == 'doing') { %>selected<% } %> value="doing" class="fa-option doing-option">&#xf017;</option>
+    <option <% if (issue.status == 'done') { %>selected<% } %> value="done" class="fa-option done-option">&#xf00c;</option>
+</select>

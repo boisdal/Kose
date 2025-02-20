@@ -19,7 +19,7 @@ const bindAddButton = function() {
                 $.get(`/project/${projectKey}/issue/newform`, function(data) {
                     let form = $(data)
                     $('.backlog-root').find('div').first().append(form)
-                    bindAllShit()
+                    bindAllStructureEvents()
                     form.find('.slick').first().trigger('focus')
                 })
             } else {
@@ -28,7 +28,7 @@ const bindAddButton = function() {
                     $.get(`/project/${projectKey}/issue/newform`, function(data) {
                         let form = $(data)
                         potentialAddingZone.children('.issue-root').last().after(form)
-                        bindAllShit()
+                        bindAllStructureEvents()
                         form.find('.slick').first().trigger('focus')
                     })
                 } else {
@@ -38,7 +38,7 @@ const bindAddButton = function() {
                         let oldIssue = potentialAddingZone[0].outerHTML
                         potentialAddingZone.replaceWith(issue)
                         issue.attr('data-old-issue', oldIssue)
-                        bindAllShit()
+                        bindAllStructureEvents()
                         form.find('.slick').first().trigger('focus')
                     }) 
 
@@ -134,7 +134,7 @@ const bindSendAllButton = function() {
                     if (i == nbOfForms - 1) {
                         // Only if last form in list should it refresh and rebind
                         $('.backlog-root').replaceWith(data)
-                        bindAllShit()
+                        bindAllStructureEvents()
                     }
                 })
             }
@@ -144,7 +144,7 @@ const bindSendAllButton = function() {
                     if (i == nbOfForms - 1) {
                         // Only if last form in list should it refresh and rebind
                         $('.backlog-root').replaceWith(data)
-                        bindAllShit()
+                        bindAllStructureEvents()
                     }
                 })
             } else {
@@ -174,7 +174,7 @@ const bindCancelAllButton = function() {
                 console.log(`form type not supported : ${formType}`)
             }
         })
-        bindAllShit()
+        bindAllStructureEvents()
     })
 }           
 
@@ -190,7 +190,7 @@ const bindEditButton = function() {
             issueText.replaceWith(newIssueText)
             newIssueText.attr('data-old-issue-text', oldIssueText) 
             updateInputSize()
-            bindAllShit()
+            bindAllStructureEvents()
         })
     })
 }
@@ -206,12 +206,12 @@ const bindCancelButton = function() {
             console.log()
             if (parentRoot.find('.issue-root').length == 0) {
                 parentRoot.replaceWith($(parentRoot.attr('data-old-issue')))
-                bindAllShit()
+                bindAllStructureEvents()
             }
         } else if (formType == 'edit') {
             canceledIssueText = $(e.target).closest('.issue-text')
             canceledIssueText.replaceWith($(canceledIssueText.attr('data-old-issue-text')))
-            bindAllShit()
+            bindAllStructureEvents()
         } else {
             console.log(`form type not supported : ${formType}`)
         }
@@ -229,7 +229,7 @@ const bindDeleteButton = function() {
         if (confirm(`Delete issue n°${issueKey} : ${issueTitle} ?`)) {
             $.post(`/project/${projectKey}/issue/${issueKey}/delete`, {rootIssueKey: rootIssueKey}, function(data) {
                 $('.backlog-root').replaceWith(data)
-                bindAllShit()
+                bindAllStructureEvents()
             })
         }
     })
@@ -255,14 +255,14 @@ const bindAdoptModeButton = function() {
                 // console.log(`Chosen new parent for issue n°${movingIssueKey} is issue n°${parentIssueKey}`)
                 $.post(`/project/${projectKey}/issue/${movingIssueKey}/adopt`, {rootIssueKey: rootIssueKey, newParentKey: parentIssueKey}, function(data) {
                     $('.backlog-root').replaceWith(data)
-                    bindAllShit()
+                    bindAllStructureEvents()
                 })
             })
         })
     })
 }
 
-const bindAllShit = function() {
+const bindAllStructureEvents = function() {
     updateInputSize()
     bindEditButton()
     bindDeleteButton()
@@ -278,4 +278,4 @@ const bindAllShit = function() {
     $('html').on('input', updateInputSize)
 }
 
-bindAllShit()
+bindAllStructureEvents()
