@@ -1,10 +1,12 @@
 <div class="issue-text" data-issue-key="<%= issue.key %>"><span class="issueType"><%= issue.issueType %></span> 
-<% if (issue.status == 'todo') { %> <i class="fa fa-lightbulb-o" style="color: lightgray"></i> <% } %> 
-<% if (issue.status == 'doing') { %> <i class="fa fa-clock-o" style="color: rgb(58, 203, 255)"></i> <% } %> 
+<% if (issue.status == 'todo') { %> <i class="fa fa-lightbulb" style="color: lightgray"></i> <% } %> 
+<% if (issue.status == 'doing') { %> <i class="fa fa-clock" style="color: rgb(58, 203, 255)"></i> <% } %> 
 <% if (issue.status == 'done') { %> <i class="fa fa-check" style="color: lightgreen"></i> <% } %> 
 <span class="attribute">id</span>=<span class="value">"<%= issue.key %>"</span> 
 <span class="attribute">title</span>=<span class="value">"<%= issue.title %>"</span> 
 <span class="attribute">sp</span>=<span class="value">"<%= issue.estimation %>"</span> 
-<i class="fa fa-xl fa-pencil edit-button"></i>
-<i class="fa fa-xl fa-trash-o delete-button"></i>
-<a href="/project/<%= project.key %>/issue/<%= issue.key %>">...</a></div>
+<i class="fa fa-pencil edit-button hide-on-adopt-mode"></i>
+<i class="fa-regular fa-trash-can delete-button hide-on-adopt-mode"></i>
+<i class="fa fa-arrow-right-from-bracket fa-rotate-270 child-adopt-button show-on-adopt-mode"></i>
+<i class="fa fa-arrow-right-to-bracket fa-rotate-90 parent-adopt-button show-on-adopt-mode"></i>
+<a href="/project/<%= project.key %>/issue/<%= issue.key %>" class="hide-on-adopt-mode">...</a></div>

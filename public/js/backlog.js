@@ -235,6 +235,33 @@ const bindDeleteButton = function() {
     })
 }
 
+const bindAdoptModeButton = function() {
+    let projectKey = $('#kose-metadata').attr('data-projectKey')
+    let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
+    $('#adoptModeButton').off('click').on('click', () => {
+        $('.backlog-root').addClass('adopt-mode-child')
+        $('.child-adopt-button').off('click').on('click', async (e) => {
+            // When moving issue is selected
+            let button = $(e.target)
+            let movingIssueKey = button.closest('.issue-text').attr('data-issue-key')
+            // console.log(`Moving issue n°${movingIssueKey}`)
+            $('.backlog-root').removeClass('adopt-mode-child')
+            $('.backlog-root').addClass('adopt-mode-parent')
+            let descendantAdoptButtonList = button.closest('.issue-root').find('.parent-adopt-button')
+            descendantAdoptButtonList.addClass('disabled')
+            $('.parent-adopt-button').off('click').not(descendantAdoptButtonList).on('click', (e) => {
+                let parentIssueAdoptButton = $(e.target)
+                let parentIssueKey = parentIssueAdoptButton.closest('.issue-text').attr('data-issue-key')
+                // console.log(`Chosen new parent for issue n°${movingIssueKey} is issue n°${parentIssueKey}`)
+                $.post(`/project/${projectKey}/issue/${movingIssueKey}/adopt`, {rootIssueKey: rootIssueKey, newParentKey: parentIssueKey}, function(data) {
+                    $('.backlog-root').replaceWith(data)
+                    bindAllShit()
+                })
+            })
+        })
+    })
+}
+
 const bindAllShit = function() {
     updateInputSize()
     bindEditButton()
@@ -246,6 +273,7 @@ const bindAllShit = function() {
     bindSendAllButton()
     bindCancelAllButton()
     bindQuickSendDeleteKeys()
+    bindAdoptModeButton()
     $('.fa-check').parent().parent().find('.fa-chevron-down').click() // TODO: trouver mieux
     $('html').on('input', updateInputSize)
 }

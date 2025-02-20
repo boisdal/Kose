@@ -147,7 +147,7 @@ div.input-holder {
     color: lightgreen!important;
 }
 
-i.cancel-button {
+.cancel-button {
     cursor: pointer;
     color: rgb(252, 99, 99);
     user-select: none; /* standard syntax */
@@ -157,7 +157,7 @@ i.cancel-button {
     -ms-user-select: none; /* IE10+ */
 }
 
-i.edit-button {
+.edit-button {
     cursor: pointer;
     color: #0d6efd;
     user-select: none; /* standard syntax */
@@ -167,7 +167,7 @@ i.edit-button {
     -ms-user-select: none; /* IE10+ */
 }
 
-i.delete-button {
+.delete-button {
     cursor: pointer;
     color: rgb(252, 99, 99);
     user-select: none; /* standard syntax */
@@ -175,4 +175,49 @@ i.delete-button {
     -moz-user-select: none; /* mozilla browsers */
     -khtml-user-select: none; /* webkit (konqueror) browsers */
     -ms-user-select: none; /* IE10+ */
+}
+
+.adopt-mode-child .hide-on-adopt-mode {
+    display: none;
+}
+
+.adopt-mode-parent .hide-on-adopt-mode {
+    display: none;
+}
+
+.child-adopt-button {
+    cursor: pointer;
+    color: lightgray;
+    user-select: none; /* standard syntax */
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+.parent-adopt-button {
+    cursor: pointer;
+    color: lightgray;
+    user-select: none; /* standard syntax */
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+.show-on-adopt-mode {
+    display: none;
+}
+
+.adopt-mode-child .child-adopt-button {
+    display: unset;
+}
+
+.adopt-mode-parent .parent-adopt-button {
+    display: unset;
+}
+
+.parent-adopt-button.disabled {
+    color: rgba(100, 100, 100, 100);
+    cursor: unset;
 }
