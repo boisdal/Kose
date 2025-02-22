@@ -1,7 +1,7 @@
 <%- include('../commons/head.com.ejs', {title: `Tickets de ${project.name}`, additionalCss: []}) %>
 
 <body>
-    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/version'}) %>
+    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/versions'}) %>
     <div class="p-3">
         <h1>Tickets de <%= project.name %></h1>
     </div>

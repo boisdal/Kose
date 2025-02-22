@@ -1,9 +1,14 @@
 <%- include('../commons/head.com.ejs', {title: `Versions de ${project.name}`, additionalCss: []}) %>
 
 <body>
-    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/version'}) %>
+    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/versions'}) %>
     <div class="p-3">
-        <h1>Versions de <%= project.name %></h1>
+        <h1>Version <%= version.versionNumber %> : <%= version.title %></h1>
+        <h3><%= version.description %></h3>
+    </div>
+    <hr>
+    <div class="p-3">
+        <h6>This page has yet to be built.</h6>
     </div>
 </body>
 

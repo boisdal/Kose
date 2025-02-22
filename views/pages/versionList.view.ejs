@@ -1,0 +1,25 @@
+<%- include('../commons/head.com.ejs', {title: `Versions de ${project.name}`, additionalCss: ['versionList']}) %>
+
+<body>
+    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/versions'}) %>
+    <div class="p-3">
+        <h1>Versions de <%= project.name %></h1>
+    </div>
+    <div class="timeline">
+        <ul>
+            <% for (let version of versionList){ %>
+                <li>
+                  <span><%= version.versionNumber %></span>
+                  <div class="content">
+                    <h3><%= version.title %></h3>
+                    <p><%= version.description %></p>
+                  </div>
+                </li>
+            <% } %>
+        </ul>
+      </div>
+</body>
+
+<%- include('../commons/foot.com.ejs') %>
+
+<script src="/js/versionList.js"></script>
