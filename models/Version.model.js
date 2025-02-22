@@ -22,6 +22,10 @@ const VersionSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
+  status: {
+    type: String,
+    required: false,
+  },
   title: {
     type: String,
     required: true,

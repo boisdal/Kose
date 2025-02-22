@@ -1,61 +1,84 @@
 
-  .timeline{
-    padding:30px 20px;
+.version-timeline{
+  padding:30px 20px;
+}
+
+.version-timeline > ul{
+  list-style-type:none;
+  border-left:2px solid #094a68;
+  padding:10px 5px;
+}
+
+.version-timeline > ul > li{
+  padding:20px 20px;
+  position:relative;
+  cursor:pointer;
+  transition:.5s;
+}
+
+.version-timeline > ul > li span{
+  display:inline-block;
+  background-color:#1685b8;
+  border-radius:25px;
+  padding:2px 5px;
+  font-size:15px;
+  text-align:center;
+}
+
+.version-timeline > ul > li .version-content h3{
+  color:#34ace0;
+  font-size:17px;
+  padding-top:5px;
+}
+
+.version-timeline > ul > li .version-content p{
+  padding:5px 0px 15px 0px;
+  font-size:15px;
+}
+
+.version-timeline > ul > li:before{
+  position:absolute;
+  content:'';
+  width:10px;
+  height:10px;
+  background-color:#34ace0;
+  border-radius:50%;
+  left:-11px;
+  top:28px;
+  transition:.5s;
+}
+
+.version-timeline > ul > li:hover{
+  background-color:#071f2a;
+}
+
+.version-timeline > ul > li:hover:before{
+  background-color:#0F0;
+  box-shadow:0px 0px 10px 2px #0F0;
+}
+
+@media (max-width:300px){
+  .version-timeline{
+    width:100%;
+    padding:30px 5px 30px 10px;
   }
-  .timeline ul{
-    list-style-type:none;
-    border-left:2px solid #094a68;
-    padding:10px 5px;
-  }
-  .timeline ul li{
-    padding:20px 20px;
-    position:relative;
-    cursor:pointer;
-    transition:.5s;
-  }
-  .timeline ul li span{
-    display:inline-block;
-    background-color:#1685b8;
-    border-radius:25px;
-    padding:2px 5px;
-    font-size:15px;
-    text-align:center;
-  }
-  .timeline ul li .content h3{
+  .version-timeline > ul > li .version-content h3{
     color:#34ace0;
-    font-size:17px;
-    padding-top:5px;
-  }
-  .timeline ul li .content p{
-    padding:5px 0px 15px 0px;
     font-size:15px;
   }
-  .timeline ul li:before{
-    position:absolute;
-    content:'';
-    width:10px;
-    height:10px;
-    background-color:#34ace0;
-    border-radius:50%;
-    left:-11px;
-    top:28px;
-    transition:.5s;
-  }
-  .timeline ul li:hover{
-    background-color:#071f2a;
-  }
-  .timeline ul li:hover:before{
-    background-color:#0F0;
-    box-shadow:0px 0px 10px 2px #0F0;
-  }
-  @media (max-width:300px){
-    .timeline{
-      width:100%;
-      padding:30px 5px 30px 10px;
-    }
-    .timeline ul li .content h3{
-      color:#34ace0;
-      font-size:15px;
-    }
-  
-  }
+}
+
+.version-timeline > ul > li span.version-todo,
+.version-timeline > ul > li span.version-todo-sp {
+  background-color: grey;
+}
+
+.version-timeline > ul > li span.version-doing,
+.version-timeline > ul > li span.version-doing-sp {
+  background-color: blue;
+}
+
+.version-timeline > ul > li span.version-done,
+.version-timeline > ul > li span.version-done-sp {
+  background-color: purple;
+}

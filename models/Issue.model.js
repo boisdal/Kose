@@ -46,6 +46,10 @@ const IssueSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  versionId: {
+    type: mongoose.ObjectId,
+    required: false,
+  },
 })
 
 module.exports = mongoose.model('Issue', IssueSchema)

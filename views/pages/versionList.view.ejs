@@ -2,17 +2,26 @@
 
 <body>
     <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/versions'}) %>
+    <div id="kose-metadata" data-projectKey="<%= project.key %>" style="display: none;"></div>
     <div class="p-3">
         <h1>Versions de <%= project.name %></h1>
     </div>
-    <div class="timeline">
+    <div class="version-timeline">
         <ul>
             <% for (let version of versionList){ %>
-                <li>
-                  <span><%= version.versionNumber %></span>
-                  <div class="content">
+                <li data-version-number="<%= version.versionNumber %>">
+                  <span class="m-1 ms-0 <% if (version.status == 'todo') { %>version-todo<% } %><% if (version.status == 'doing') { %>version-doing<% } %><% if (version.status == 'done') { %>version-done<% } %>"><%= version.versionNumber %></span>
+                  <div class="m-1 ms-0">
+                    <span class="version-todo-sp m-1 ms-0">To Do : <%= version.issueTodoSp %></span><span class="version-doing-sp m-1">Doing : <%= version.issueDoingSp %></span><span class="version-done-sp m-1">Done : <%= version.issueDoneSp %></span>
+                  </div>
+                  <div class="version-content">
                     <h3><%= version.title %></h3>
                     <p><%= version.description %></p>
+                    <ul>
+                        <% for (let issue of version.issueList){ %>
+                        <li><%= issue.title %></li>
+                        <% } %>
+                    </ul>
                   </div>
                 </li>
             <% } %>
