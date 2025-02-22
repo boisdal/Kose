@@ -50,6 +50,10 @@ const IssueSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: false,
   },
+  versionNumber: {
+    type: String,
+    required: false,
+  },
 })
 
 module.exports = mongoose.model('Issue', IssueSchema)

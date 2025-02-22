@@ -4,6 +4,7 @@
 <% if (issue.status == 'done') { %> <i class="fa fa-check" style="color: lightgreen"></i> <% } %> 
 <span class="attribute">id</span>=<span class="value">"<%= issue.key %>"</span> 
 <span class="attribute">title</span>=<span class="value">"<%= issue.title %>"</span> 
+<% if (issue.versionNumber) { %><span class="attribute">version</span>=<span class="value">"<%= issue.versionNumber %>"</span> <% } %>
 <span class="attribute">sp</span>=<span class="value">"<%= issue.estimation %>"</span> 
 <i class="fa fa-pencil edit-button hide-on-adopt-mode"></i>
 <i class="fa-regular fa-trash-can delete-button hide-on-adopt-mode"></i>

@@ -2,6 +2,7 @@ const router = require('express').Router()
 const { ensureAuth } = require('../middleware/auth')
 const Project = require('../models/Project.model')
 const Issue = require('../models/Issue.model')
+const Version = require('../models/Version.model')
 const populateIssueChildren = require('../utils/issue.utils')
 
 router.get('/:projectKey/backlog', ensureAuth, async (req, res) => {

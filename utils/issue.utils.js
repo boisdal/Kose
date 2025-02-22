@@ -1,7 +1,10 @@
 const Issue = require('../models/Issue.model')
+const Version = require('../models/Version.model')
 
 const populateIssueChildren = async function(issue) {
     issue.childrenIssueList = await Issue.find({ parentIssue: issue._id })
+    let version = await Version.findById(issue.versionId)
+    issue.versionNumber = version?.versionNumber
     for (let childIssue of issue.childrenIssueList) {
         await populateIssueChildren(childIssue)
     }
