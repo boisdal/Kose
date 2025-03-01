@@ -127,10 +127,11 @@ const bindSendAllButton = function() {
             let issueType = issueText.find('.slick[placeholder="userstory"]').val() || 'userstory'
             let issueStatus = issueText.find('.fa-option').val()
             let issueTitle = issueText.find('.slick[placeholder="title"]').val() || 'titre'
+            let issueVersion = issueText.find('.version-select').val()
             let issueEstimation = issueText.find('.slick[placeholder="5"]').val() || '5'
             let formType = issueText.attr('data-form-type')
             if (formType == 'new') {
-                await $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
+                await $.post(`/project/${projectKey}/issue/new`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, version: issueVersion, estimation: issueEstimation}, function(data) {
                     if (i == nbOfForms - 1) {
                         // Only if last form in list should it refresh and rebind
                         $('.backlog-root').replaceWith(data)
@@ -140,7 +141,7 @@ const bindSendAllButton = function() {
             }
             else if (formType == 'edit') {
                 let issueKey = issueText.attr('data-issue-key')
-                await $.post(`/project/${projectKey}/issue/${issueKey}/edit`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, estimation: issueEstimation}, function(data) {
+                await $.post(`/project/${projectKey}/issue/${issueKey}/edit`, {rootIssueKey: rootIssueKey, parent: parentKey, type: issueType, status: issueStatus, title: issueTitle, version: issueVersion, estimation: issueEstimation}, function(data) {
                     if (i == nbOfForms - 1) {
                         // Only if last form in list should it refresh and rebind
                         $('.backlog-root').replaceWith(data)

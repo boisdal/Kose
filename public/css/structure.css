@@ -221,3 +221,10 @@ div.input-holder {
     color: rgba(100, 100, 100, 100);
     cursor: unset;
 }
+
+select.version-select {
+    background-color: #212529;
+    border: none;
+    color: #ce9178;
+    cursor: pointer;
+}

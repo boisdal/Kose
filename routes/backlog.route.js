@@ -3,6 +3,7 @@ const { ensureAuth } = require('../middleware/auth')
 const Project = require('../models/Project.model')
 const Issue = require('../models/Issue.model')
 const Version = require('../models/Version.model')
+const { compareVersions } = require('compare-versions')
 const populateIssueChildren = require('../utils/issue.utils')
 
 router.get('/:projectKey/backlog', ensureAuth, async (req, res) => {
@@ -18,13 +19,20 @@ router.get('/:projectKey/backlog', ensureAuth, async (req, res) => {
 })
 
 router.get('/:projectKey/issue/newform', ensureAuth, async (req, res) => {
-  res.render('partials/newIssueForm.part.ejs')
+  let projectKey = req.params.projectKey
+  let project = await Project.findOne({key: projectKey})
+  let versionList = await Version.find({projectId: project._id})
+  versionList.sort((a, b) => compareVersions(a.versionNumber, b.versionNumber))
+  res.render('partials/newIssueForm.part.ejs', {versionList: versionList})
 })
 
 router.get('/:projectKey/issue/:issueKey/parentform', ensureAuth, async (req, res) => {
   let project = await Project.findOne({key: req.params.projectKey})
   let issue = await Issue.findOne({projectId: project._id, key: req.params.issueKey})
-  res.render('partials/newParent.part.ejs', {project: project, issue: issue})
+  let versionList = await Version.find({projectId: project._id})
+  versionList.sort((a, b) => compareVersions(a.versionNumber, b.versionNumber))
+  await populateIssueChildren(issue)
+  res.render('partials/newParent.part.ejs', {project: project, issue: issue, versionList: versionList})
 })
 
 router.post('/:projectKey/issue/new', ensureAuth, async (req, res) => {
@@ -40,6 +48,7 @@ router.post('/:projectKey/issue/new', ensureAuth, async (req, res) => {
     projectId: project._id,
     key: newKey,
     title: req.body.title,
+    versionId: req.body.version,
     estimation: Number(req.body.estimation),
     issueType: req.body.type,
     status: req.body.status
@@ -66,18 +75,23 @@ router.post('/:projectKey/issue/new', ensureAuth, async (req, res) => {
 router.get('/:projectKey/issue/:issueKey/geteditform', ensureAuth, async (req, res) => {
   let projectKey = req.params.projectKey
   let project = await Project.findOne({key: projectKey})
+  let versionList = await Version.find({projectId: project._id})
+  versionList.sort((a, b) => compareVersions(a.versionNumber, b.versionNumber))
   let issueKey = req.params.issueKey
   let issue = await Issue.findOne({projectId: project._id, key: issueKey})
   await populateIssueChildren(issue)
-  res.render('partials/editIssueForm.part.ejs', {issue: issue})
+  res.render('partials/editIssueForm.part.ejs', {issue: issue, versionList: versionList})
 })
 
 router.post('/:projectKey/issue/:issueKey/edit', ensureAuth, async (req, res) => {
   let project = await Project.findOne({key: req.params.projectKey})
   let issueKey = req.params.issueKey
+  let issueVersion = req.body.version
+  if (issueVersion == 'none') {issueVersion = null}
   let updatedIssueJson = {
     key: issueKey,
     title: req.body.title,
+    versionId: issueVersion,
     estimation: Number(req.body.estimation),
     issueType: req.body.type,
     status: req.body.status

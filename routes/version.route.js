@@ -7,8 +7,8 @@ const { compareVersions } = require('compare-versions')
 const populateIssueChildren = require('../utils/issue.utils')
 
 router.get('/:projectKey/versions', ensureAuth, async (req, res) => {
-  let projetctKey = req.params.projectKey
-  let project = await Project.findOne({key: projetctKey})
+  let projectKey = req.params.projectKey
+  let project = await Project.findOne({key: projectKey})
   let versionList = await Version.find({projectId: project._id})
   versionList.sort((a, b) => compareVersions(a.versionNumber, b.versionNumber))
   for (let version of versionList) {

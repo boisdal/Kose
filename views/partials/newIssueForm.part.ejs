@@ -3,6 +3,7 @@
         <select class="fa-option" onchange="optionUpdate(this)"><option selected value="todo" class="fa-option todo-option">&#xf0eb;</option><option value="doing" class="fa-option doing-option">&#xf017;</option><option value="done" class="fa-option done-option">&#xf00c;</option></select>
         <span class="attribute">id</span>=<span class="value">"..."</span> 
         <span class="attribute">title</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="title" enterkeyhint="next"></div>"</span> 
+        <span class="attribute">version</span>=<span class="value">"<select class="version-select"><option value="none">--</option><% for (let version of versionList) {%> <option value="<%= version._id %>"><%= version.versionNumber %></option> <% } %></select>"</span> 
         <span class="attribute">sp</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="5" enterkeyhint="send"></div>"</span> 
         <i class="fa fa-times cancel-button"></i></div><span class="bracket">&#47;&gt;</span>
 </div>
