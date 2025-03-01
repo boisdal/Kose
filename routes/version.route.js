@@ -37,9 +37,13 @@ router.get('/:projectKey/versions', ensureAuth, async (req, res) => {
   res.render('pages/versionList.view.ejs', {user:req.user, project: project, versionList: versionList})
 })
 
+router.get('/:projectKey/versions/newform', ensureAuth, async (req, res) => {
+  res.render('partials/version.part.ejs', {version: 'new', mode: 'edit'})
+})
+
 router.get('/:projectKey/versions/:versionNumber', ensureAuth, async (req, res) => {
-  let projetctKey = req.params.projectKey
-  let project = await Project.findOne({key: projetctKey})
+  let projectKey = req.params.projectKey
+  let project = await Project.findOne({key: projectKey})
   let versionNumber = req.params.versionNumber
   let version = await Version.findOne({projectId: project._id, versionNumber: versionNumber})
   res.render('pages/version.view.ejs', {user:req.user, project: project, version: version})

@@ -82,3 +82,32 @@
 .version-timeline > ul > li span.version-done-sp {
   background-color: purple;
 }
+
+.version-button-row {
+  position: sticky;
+  top: 75px;
+  background-color: #212529;
+  z-index: 10;
+}
+
+input.slick {
+  all: unset;
+  min-width: 10px;
+}
+
+.version-timeline > ul > li span.hidden-input {
+  display: none;
+  white-space: pre;
+}
+
+div.input-holder {
+  display: contents;
+}
+
+input.slick::placeholder {
+  color: white;
+}
+
+.version-title-input {
+  all: unset
+}
