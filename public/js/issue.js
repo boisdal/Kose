@@ -23,6 +23,7 @@ const bindSendFieldButton = function() {
         let fieldValue = tr.find('input').val() || tr.find('select').val() || tr.find('textarea').val()
         $.post(`/project/${projectKey}/issue/${rootIssueKey}/editfield/${fieldName}`, {value: fieldValue}, function(data) {
             tr.find('td').last().html(data)
+            tr.removeClass('edit-mode')
         })
     })
 }
@@ -32,6 +33,7 @@ const bindCancelFieldButton = function() {
         let tr = $(e.target).closest('tr')
         let td = tr.find('td').last()
         td.html(tr.attr('data-old-td'))
+        tr.removeClass('edit-mode')
     })
 }
 

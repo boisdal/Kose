@@ -1,0 +1,6 @@
+<select class="version-select">
+    <option value="none">--</option>
+    <% for (let version of versionList) {%> 
+        <option <% if (''+issue.versionId == ''+version._id) { %>selected<% } %> value="<%= version._id %>"><%= version.versionNumber %></option> 
+    <% } %>
+</select>
