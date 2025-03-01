@@ -1,4 +1,6 @@
-$('#backlogNavLink').addClass('active')
+if (!($('#issueNavLink').hasClass('active'))) {
+    $('#backlogNavLink').addClass('active')
+}
 
 const bindAddButton = function() {
     $('#newIssueButton').off('click')
