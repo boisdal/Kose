@@ -1,4 +1,4 @@
-<li data-version-number="<%= version.versionNumber || version %>" class="<% if (mode == 'edit') { %>edit-mode<% } %>">
+<li data-previous-version-number="<%= version.previousVersionNumber || version %>" data-version-number="<%= version.versionNumber || version %>" class="<% if (mode == 'edit') { %>edit-mode<% } %>">
     <span class="m-1 ms-0 <% if (version.status == 'todo' || version == 'new') { %>version-todo<% } %><% if (version.status == 'doing') { %>version-doing<% } %><% if (version.status == 'done') { %>version-done<% } %>">
         <% if (mode != 'edit') { %><%= version.versionNumber %><% } else { %><div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="0.0.0" value="<%= version.versionNumber %>"></div><% } %>
     </span>
@@ -7,7 +7,7 @@
         <span class="version-todo-sp m-1 ms-0">To Do : <%= version.issueTodoSp || 0 %></span><span class="version-doing-sp m-1">Doing : <%= version.issueDoingSp || 0 %></span><span class="version-done-sp m-1">Done : <%= version.issueDoneSp || 0 %></span>
     </div>
     <div class="version-content">
-        <h3><% if (mode != 'edit') { %><%= version.title %><% } else { %><input class="version-title-input" type="text" placeholder="Insert title here..." value="<% version.title %>"><% } %></h3>
+        <h3><% if (mode != 'edit') { %><%= version.title %><% } else { %><input class="version-title-input" type="text" placeholder="Insert title here ..." value="<% version.title %>"><% } %></h3>
         <p><% if (mode != 'edit') { %><%= version.description %><% } else { %><textarea style="all: unset" cols="40" rows="5" placeholder="Insert description here ..."><%= version.description %></textarea><% } %></p>
         <ul>
             <% if (version != 'new') { for (let issue of version.issueList){ %>

@@ -16,6 +16,10 @@
   transition:.5s;
 }
 
+.version-timeline > ul > li.edit-mode{
+  cursor: unset;
+}
+
 .version-timeline > ul > li span{
   display:inline-block;
   background-color:#1685b8;
@@ -110,4 +114,66 @@ input.slick::placeholder {
 
 .version-title-input {
   all: unset
+}
+
+.edit-mode .edit-version-button,
+.edit-mode .delete-version-button {
+  display: none
+}
+
+.send-version-button,
+.cancel-version-button {
+  display: none
+}
+
+.edit-version-button,
+.delete-version-button {
+  display: unset
+}
+
+.edit-mode .send-version-button,
+.edit-mode .cancel-version-button {
+  display: unset
+}
+
+.send-version-button {
+  margin-right: 5px;
+  cursor: pointer;
+  color: rgb(99, 255, 99);
+  user-select: none; /* standard syntax */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}
+
+.edit-version-button {
+  margin-right: 5px;
+  cursor: pointer;
+  color: rgb(99, 99, 255);
+  user-select: none; /* standard syntax */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}
+
+.cancel-version-button {
+  cursor: pointer;
+  color: rgb(255, 99, 99);
+  user-select: none; /* standard syntax */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}
+
+.delete-version-button {
+  cursor: pointer;
+  color: rgb(255, 99, 99);
+  user-select: none; /* standard syntax */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
 }

@@ -34,6 +34,10 @@ const VersionSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  previousVersionNumber: {
+    type: String,
+    required: false,
+  },
 })
 
 module.exports = mongoose.model('Version', VersionSchema)

@@ -36,19 +36,20 @@ router.get('/:projectKey/issue/:issueKey/parentform', ensureAuth, async (req, re
 })
 
 router.post('/:projectKey/issue/new', ensureAuth, async (req, res) => {
-  console.log(req.body)
   //TODO: Ajouter vérifications des valeurs saisies / sanitize
   let project = await Project.findOne({key: req.params.projectKey})
   let newKey = 0
   let highestKey = (await Issue.find({ projectId: project._id }).limit(1).sort('-key').select('key').exec())[0]
   if (highestKey) {
     newKey = (highestKey.key) + 1
-  }  
+  }
+  let issueVersion = req.body.version
+  if (issueVersion == 'none') {issueVersion = null}
   let newIssueJson = {
     projectId: project._id,
     key: newKey,
     title: req.body.title,
-    versionId: req.body.version,
+    versionId: issueVersion,
     estimation: Number(req.body.estimation),
     issueType: req.body.type,
     status: req.body.status
