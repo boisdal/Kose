@@ -42,34 +42,43 @@ const bindSendVersionButton = function() {
         let newVersionNumber = versionLi.find('.slick[placeholder="0.0.0"]').val()
         let versionTitle = versionLi.find('input[placeholder="Insert title here ..."]').val()
         let versionDescription = versionLi.find('textarea[placeholder="Insert description here ..."]').val()
-        console.log(versionTitle, versionDescription)
         if (oldVersionNumber == 'new') {
             $.post(`/project/${projectKey}/versions/new`, {newVersionNumber, versionTitle, versionDescription}, function(data) {
-                let newVersionLi = $(data)
-                let previousVersionNumber = newVersionLi.attr('data-previous-version-number')
-                if (previousVersionNumber == '__first__') {
-                    let newVersionNumber = newVersionLi.attr('data-version-number')
-                    let formerFirstVersion = $('li[data-previous-version-number="__first__"]')
-                    formerFirstVersion.attr('data-previous-version-number', newVersionNumber)
-                    formerFirstVersion.before(newVersionLi)
-                } else {
-                    $(`li[data-version-number="${previousVersionNumber}"]`).after(newVersionLi)
-                }
-                versionLi.remove()
-                bindAllVersionListEvents()
+                handlePostSendVersion(data, versionLi)
             })
         } else {
             $.post(`/project/${projectKey}/versions/${oldVersionNumber}/update`, {newVersionNumber, versionTitle, versionDescription}, function(data) {
-                console.log(data)
+                handlePostSendVersion(data, versionLi)
             })
         }
     })
 }
 
+const handlePostSendVersion = function(data, versionLi) {
+    let newVersionLi = $(data)
+    let previousVersionNumber = newVersionLi.attr('data-previous-version-number')
+    if (previousVersionNumber == '__first__') {
+        let newVersionNumber = newVersionLi.attr('data-version-number')
+        let formerFirstVersion = $('li[data-previous-version-number="__first__"]')
+        formerFirstVersion.attr('data-previous-version-number', newVersionNumber)
+        formerFirstVersion.before(newVersionLi)
+    } else {
+        $(`li[data-version-number="${previousVersionNumber}"]`).after(newVersionLi)
+    }
+    versionLi.remove()
+    bindAllVersionListEvents()
+}
+
 const bindEditVersionButton = function() {
     let projectKey = $('#kose-metadata').attr('data-projectKey')
     $('.edit-version-button').off('click').on('click', (event) => {
-        
+        let versionLi = $(event.target).closest('li')
+        let oldVersionNumber = versionLi.attr('data-version-number')
+        $.get(`/project/${projectKey}/versions/${oldVersionNumber}/geteditform`, function(data) {
+            versionLi.replaceWith(data)
+            updateInputSize()
+            bindAllVersionListEvents()
+        })
         return false
     })
 }
