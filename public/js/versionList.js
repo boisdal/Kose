@@ -106,6 +106,20 @@ const bindCancelAllVersionButton = function() {
     })
 }
 
+const bindSendAllVersionButton = function() {
+    $('#sendAllButton').off('click').on('click', (event) => {
+        $('.edit-mode .send-version-button').click()
+        bindAllVersionListEvents()
+    })
+}
+
+const bindEditAllVersionButton = function() {
+    $('#editAllButton').off('click').on('click', (event) => {
+        $('li:not(.edit-mode) .edit-version-button').click()
+        bindAllVersionListEvents()
+    })
+}
+
 const bindAllVersionListEvents = function() {
     bindVersionDetailClick()
     bindAddVersionButton()
@@ -113,6 +127,8 @@ const bindAllVersionListEvents = function() {
     bindEditVersionButton()
     bindCancelVersionButton()
     bindCancelAllVersionButton()
+    bindSendAllVersionButton()
+    bindEditAllVersionButton()
     $('html').on('input', updateInputSize)
 }
 
