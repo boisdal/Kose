@@ -31,6 +31,7 @@ const bindAddButton = function() {
                         let form = $(data)
                         potentialAddingZone.children('.issue-root').last().after(form)
                         bindAllStructureEvents()
+                        potentialAddingZone.find('.folded-chevron').click()
                         form.find('.slick').first().trigger('focus')
                     })
                 } else {
@@ -41,6 +42,7 @@ const bindAddButton = function() {
                         potentialAddingZone.replaceWith(issue)
                         issue.attr('data-old-issue', oldIssue)
                         bindAllStructureEvents()
+                        potentialAddingZone.find('.folded-chevron').click()
                         form.find('.slick').first().trigger('focus')
                     }) 
 
