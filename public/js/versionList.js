@@ -75,11 +75,34 @@ const bindEditVersionButton = function() {
         let versionLi = $(event.target).closest('li')
         let oldVersionNumber = versionLi.attr('data-version-number')
         $.get(`/project/${projectKey}/versions/${oldVersionNumber}/geteditform`, function(data) {
-            versionLi.replaceWith(data)
+            let oldVersionLiHtml = versionLi.get(0).outerHTML
+            let newVersionLi = $(data)
+            versionLi.replaceWith(newVersionLi)
+            newVersionLi.attr('data-old-vesrion-li-html', oldVersionLiHtml)
             updateInputSize()
             bindAllVersionListEvents()
         })
         return false
+    })
+}
+
+const bindCancelVersionButton = function() {
+    $('.cancel-version-button').off('click').on('click', (event) => {
+        let versionLi = $(event.target).closest('li')
+        if (versionLi.attr('data-version-number') == 'new') {
+            versionLi.remove()
+        } else {
+            let oldVersionLiHtml = versionLi.attr('data-old-vesrion-li-html')
+            versionLi.replaceWith(oldVersionLiHtml)
+        }
+        bindAllVersionListEvents()
+    })
+}
+
+const bindCancelAllVersionButton = function() {
+    $('#cancelAllButton').off('click').on('click', (event) => {
+        $('.edit-mode .cancel-version-button').click()
+        bindAllVersionListEvents()
     })
 }
 
@@ -88,6 +111,8 @@ const bindAllVersionListEvents = function() {
     bindAddVersionButton()
     bindSendVersionButton()
     bindEditVersionButton()
+    bindCancelVersionButton()
+    bindCancelAllVersionButton()
     $('html').on('input', updateInputSize)
 }
 
