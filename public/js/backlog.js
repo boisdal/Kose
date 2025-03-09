@@ -42,7 +42,7 @@ const bindAddButton = function() {
                         potentialAddingZone.replaceWith(issue)
                         issue.attr('data-old-issue', oldIssue)
                         bindAllStructureEvents()
-                        potentialAddingZone.find('.folded-chevron').click()
+                        issue.find('.folded-chevron').click()
                         form.find('.slick').first().trigger('focus')
                     }) 
 
