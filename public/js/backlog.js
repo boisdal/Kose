@@ -279,7 +279,7 @@ const bindAllStructureEvents = function() {
     bindCancelAllButton()
     bindQuickSendDeleteKeys()
     bindAdoptModeButton()
-    $('.fa-check').parent().parent().find('.fa-chevron-down').click() // TODO: trouver mieux
+    $('.fa-check').closest('.issue-container').find('.fa-chevron-down:not(.folded-chevron)').click()
     $('html').on('input', updateInputSize)
 }
 
