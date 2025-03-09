@@ -78,4 +78,12 @@ router.post('/:projectKey/versions/:versionNumber/update', ensureAuth, async (re
   res.render('partials/version.part.ejs', {mode: 'list', version: version})
 })
 
+router.post('/:projectKey/versions/:versionNumber/delete', ensureAuth, async (req, res) => {
+  let projectKey = req.params.projectKey
+  let project = await Project.findOne({key: projectKey})
+  let versionNumber = req.params.versionNumber
+  await Version.deleteOne({projectId: project._id, versionNumber: versionNumber})
+  res.json({status: 'ok'})
+})
+
 module.exports = router

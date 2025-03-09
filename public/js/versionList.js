@@ -120,6 +120,22 @@ const bindEditAllVersionButton = function() {
     })
 }
 
+const bindDeleteVersionButton = function() {
+    $('.delete-version-button').off('click').on('click', (event) => {
+        let projectKey = $('#kose-metadata').attr('data-projectKey')
+        let versionLi = $(event.target).closest('li')
+        let versionNumber = versionLi.attr('data-version-number')
+        let versionTitle = versionLi.find('input[placeholder="Insert title here ..."]').val()
+        if (confirm(`Delete version ${versionNumber} : ${versionTitle} ?`)) {
+            $.post(`/project/${projectKey}/versions/${versionNumber}/delete`, function(data) {
+                versionLi.remove()
+                bindAllVersionListEvents()
+            })
+        }
+        return false
+    })
+}
+
 const bindAllVersionListEvents = function() {
     bindVersionDetailClick()
     bindAddVersionButton()
@@ -129,6 +145,7 @@ const bindAllVersionListEvents = function() {
     bindCancelAllVersionButton()
     bindSendAllVersionButton()
     bindEditAllVersionButton()
+    bindDeleteVersionButton()
     $('html').on('input', updateInputSize)
 }
 
