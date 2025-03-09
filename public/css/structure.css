@@ -228,3 +228,10 @@ select.version-select {
     color: #ce9178;
     cursor: pointer;
 }
+
+.backlog-button-row {
+    position: sticky;
+    bottom: 0px;
+    background-color: #212529;
+    z-index: 10;
+}
