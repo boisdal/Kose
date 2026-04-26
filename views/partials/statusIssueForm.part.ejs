@@ -1,5 +1,10 @@
 <select class="fa-option" onchange="optionUpdate(this)">
-    <option <% if (issue.status == 'todo') { %>selected<% } %> value="todo" class="fa-option todo-option">&#xf0eb;</option>
-    <option <% if (issue.status == 'doing') { %>selected<% } %> value="doing" class="fa-option doing-option">&#xf017;</option>
-    <option <% if (issue.status == 'done') { %>selected<% } %> value="done" class="fa-option done-option">&#xf00c;</option>
+    <option <% if (issue.status == 'todo') { %>selected<% } %> value="todo" class="fa-option todo-option">&#xf0eb; To do</option>
+    <option <% if (issue.status == 'ready') { %>selected<% } %> value="ready" class="fa-option todo-option">&#xf0eb; Ready</option>
+    <option <% if (issue.status == 'doing') { %>selected<% } %> value="doing" class="fa-option doing-option">&#xf017; Doing</option>
+    <option <% if (issue.status == 'in_progress') { %>selected<% } %> value="in_progress" class="fa-option doing-option">&#xf017; In progress</option>
+    <option <% if (issue.status == 'blocked') { %>selected<% } %> value="blocked" class="fa-option">&#xf05e; Blocked</option>
+    <option <% if (issue.status == 'suggested') { %>selected<% } %> value="suggested" class="fa-option">&#xf4ad; Suggested</option>
+    <option <% if (issue.status == 'done') { %>selected<% } %> value="done" class="fa-option done-option">&#xf00c; Done</option>
+    <option <% if (issue.status == 'released') { %>selected<% } %> value="released" class="fa-option done-option">&#xf135; Released</option>
 </select>

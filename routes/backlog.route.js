@@ -9,13 +9,70 @@ const populateIssueChildren = require('../utils/issue.utils')
 router.get('/:projectKey/backlog', ensureAuth, async (req, res) => {
     let key = req.params.projectKey
     let project = await Project.findOne({key: key})
-    // TODO: Traiter cas où clé projet inexistante
-    // TODO: S'assurer des droits du user
-    let rootIssueList = await Issue.find({projectId: project._id, parentIssue: null})
+    const activeFilter = req.query.status || 'all'
+    const filter = { projectId: project._id, parentIssue: null }
+    if (activeFilter !== 'all') filter.status = activeFilter
+    let rootIssueList = await Issue.find(filter)
     for (let rootIssue of rootIssueList) {
       await populateIssueChildren(rootIssue)
     }
-    res.render('pages/backlog.view.ejs', {user:req.user, project: project, rootIssueList: rootIssueList})
+    res.render('pages/backlog.view.ejs', {user:req.user, project: project, rootIssueList: rootIssueList, activeFilter})
+})
+
+router.get('/:projectKey/suggestions', ensureAuth, async (req, res) => {
+  const project = await Project.findOne({key: req.params.projectKey})
+  if (!project) return res.status(404).send('Project not found')
+  const suggestions = await Issue.find({projectId: project._id, status: 'suggested'}).sort({priority: -1, createdAt: 1})
+  res.render('pages/suggestions.view.ejs', {user: req.user, project, suggestions})
+})
+
+router.post('/:projectKey/suggestions/:issueKey/approve', ensureAuth, async (req, res) => {
+  const project = await Project.findOne({key: req.params.projectKey})
+  if (!project) return res.status(404).send('Project not found')
+  const issue = await Issue.findOne({projectId: project._id, key: Number(req.params.issueKey)})
+  if (!issue || issue.status !== 'suggested') return res.status(400).send('Not a suggestion')
+  if (req.body.title) issue.title = req.body.title
+  if (req.body.description) issue.description = req.body.description
+  if (req.body.priority !== undefined && req.body.priority !== '') issue.priority = Number(req.body.priority)
+  issue.status = 'ready'
+  issue.origin = 'human'
+  issue.parent_suggestion_id = issue._id
+  issue.activity_log.push({at: new Date(), author: req.user._id, kind: 'system', body: 'Suggestion approved.'})
+  await issue.save()
+  res.redirect(`/project/${req.params.projectKey}/suggestions`)
+})
+
+router.post('/:projectKey/suggestions/:issueKey/reject', ensureAuth, async (req, res) => {
+  const project = await Project.findOne({key: req.params.projectKey})
+  if (!project) return res.status(404).send('Project not found')
+  const issue = await Issue.findOne({projectId: project._id, key: Number(req.params.issueKey)})
+  if (!issue || issue.status !== 'suggested') return res.status(400).send('Not a suggestion')
+  const reason = (req.body.reason || '').trim() || 'no reason given'
+  issue.status = 'done'
+  issue.activity_log.push({at: new Date(), author: req.user._id, kind: 'system', body: `Suggestion rejected: ${reason}`})
+  await issue.save()
+  res.redirect(`/project/${req.params.projectKey}/suggestions`)
+})
+
+router.get('/:projectKey/settings', ensureAuth, async (req, res) => {
+  const project = await Project.findOne({key: req.params.projectKey})
+  if (!project) return res.status(404).send('Project not found')
+  const User = require('../models/User.model')
+  const userList = await User.find({}).select('_id username displayName')
+  res.render('pages/projectSettings.view.ejs', {user: req.user, project, userList})
+})
+
+router.post('/:projectKey/settings', ensureAuth, async (req, res) => {
+  const project = await Project.findOne({key: req.params.projectKey})
+  if (!project) return res.status(404).send('Project not found')
+  const {working_dir, default_branch, test_command, agent_user_id, discord_category_id} = req.body
+  project.working_dir = working_dir || null
+  project.default_branch = default_branch || 'main'
+  project.test_command = test_command || null
+  project.agent_user_id = agent_user_id || null
+  project.discord_category_id = discord_category_id || null
+  await project.save()
+  res.redirect(`/project/${req.params.projectKey}/settings`)
 })
 
 router.get('/:projectKey/issue/newform', ensureAuth, async (req, res) => {

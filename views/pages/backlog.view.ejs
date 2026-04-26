@@ -4,6 +4,15 @@
     <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/backlog'}) %>
     <div id="kose-metadata" data-rootIssueKey="-1" data-projectKey="<%= project.key %>" style="display: none;"></div>
     <h1 style="margin-left: 1rem;">Backlog de <%= project.name %></h1>
+    <div class="status-filter-chips p-3" style="display:flex; gap:.5rem; flex-wrap:wrap;">
+        <% const filterChips = ['all','ready','in_progress','blocked','suggested','done','released']; %>
+        <% const activeChip = (typeof activeFilter !== 'undefined' && activeFilter) ? activeFilter : 'all'; %>
+        <% for (const chip of filterChips) { %>
+            <a href="?status=<%= chip %>" class="badge <%= activeChip === chip ? 'bg-primary' : 'bg-secondary' %> text-decoration-none" style="padding:.5rem .8rem;"><%= chip.replace('_',' ') %></a>
+        <% } %>
+        <a href="/project/<%= project.key %>/suggestions" class="badge bg-info text-decoration-none ms-auto" style="padding:.5rem .8rem;">Suggestions inbox</a>
+        <a href="/project/<%= project.key %>/settings" class="badge bg-dark text-decoration-none" style="padding:.5rem .8rem;">Settings</a>
+    </div>
     <div class="p-3"><%- include('../partials/backlog.part.ejs', {project: project, rootIssueList: rootIssueList}) %></div>
 </body>
 

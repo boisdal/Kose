@@ -1,0 +1,15 @@
+<div class="activity-log">
+    <% if (!issue.activity_log || issue.activity_log.length === 0) { %>
+        <p class="text-muted"><em>No activity yet.</em></p>
+    <% } else { %>
+        <ul class="list-unstyled">
+            <% for (const entry of issue.activity_log.slice().reverse()) { %>
+                <li class="activity-entry mb-3">
+                    <span class="badge bg-<%= entry.kind === 'system' ? 'secondary' : (entry.kind === 'progress' ? 'info' : 'primary') %>"><%= entry.kind %></span>
+                    <span class="text-muted small ms-2"><%= entry.at ? new Date(entry.at).toLocaleString() : '' %></span>
+                    <div class="mt-1"><%= entry.body %></div>
+                </li>
+            <% } %>
+        </ul>
+    <% } %>
+</div>

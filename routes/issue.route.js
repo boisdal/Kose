@@ -45,6 +45,36 @@ router.get('/:projectKey/issue/:issueKey/getfieldform/:fieldName', ensureAuth, a
   }
 })
 
+router.post('/:projectKey/issue/:issueKey/comment', ensureAuth, async (req, res) => {
+  const project = await Project.findOne({ key: req.params.projectKey })
+  if (!project) return res.status(404).send('Project not found')
+  const issue = await Issue.findOne({ projectId: project._id, key: Number(req.params.issueKey) })
+  if (!issue) return res.status(404).send('Issue not found')
+  const body = (req.body.body || '').trim()
+  if (body) {
+    issue.activity_log.push({ at: new Date(), author: req.user._id, kind: 'comment', body })
+    await issue.save()
+  }
+  res.redirect(`/project/${req.params.projectKey}/issue/${req.params.issueKey}`)
+})
+
+router.post('/:projectKey/issue/:issueKey/clarification/resolve', ensureAuth, async (req, res) => {
+  const project = await Project.findOne({ key: req.params.projectKey })
+  if (!project) return res.status(404).send('Project not found')
+  const issue = await Issue.findOne({ projectId: project._id, key: Number(req.params.issueKey) })
+  if (!issue) return res.status(404).send('Issue not found')
+  const answer = (req.body.answer || '').trim()
+  if (answer && issue.clarification) {
+    issue.clarification.answer = answer
+    issue.clarification.answered = true
+    issue.clarification.answered_at = new Date()
+    issue.status = 'ready'
+    issue.activity_log.push({ at: new Date(), author: req.user._id, kind: 'system', body: `Clarification answered: ${answer}` })
+    await issue.save()
+  }
+  res.redirect(`/project/${req.params.projectKey}/issue/${req.params.issueKey}`)
+})
+
 router.post('/:projectKey/issue/:issueKey/editfield/:fieldName', ensureAuth, async (req, res) => {
   let projectKey = req.params.projectKey
   let project = await Project.findOne({key: projectKey})

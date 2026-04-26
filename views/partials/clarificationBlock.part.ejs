@@ -1,0 +1,18 @@
+<% if (issue.clarification && issue.clarification.question) { %>
+    <div class="clarification-block alert <%= issue.clarification.answered ? 'alert-success' : 'alert-warning' %>">
+        <h5><i class="fa fa-question-circle"></i> Clarification</h5>
+        <p><strong>Question:</strong> <%= issue.clarification.question %></p>
+        <% if (issue.clarification.channel_id) { %>
+            <p class="small">Discord channel: <code><%= issue.clarification.channel_id %></code></p>
+        <% } %>
+        <% if (issue.clarification.answered) { %>
+            <p><strong>Answer:</strong> <%= issue.clarification.answer %></p>
+            <p class="small text-muted">Answered <%= new Date(issue.clarification.answered_at).toLocaleString() %></p>
+        <% } else { %>
+            <form method="POST" action="/project/<%= project.key %>/issue/<%= issue.key %>/clarification/resolve">
+                <div class="mb-2"><textarea class="form-control" name="answer" placeholder="Answer the clarification..." required></textarea></div>
+                <button class="btn btn-sm btn-primary" type="submit">Resolve</button>
+            </form>
+        <% } %>
+    </div>
+<% } %>

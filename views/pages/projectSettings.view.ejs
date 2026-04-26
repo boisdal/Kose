@@ -1,0 +1,47 @@
+<%- include('../commons/head.com.ejs', {title: `Settings — ${project.name}`, additionalCss: ['structure']}) %>
+
+<body>
+    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: ''}) %>
+    <div class="p-3">
+        <h1>Project settings — <%= project.name %></h1>
+        <% if (!project.working_dir) { %>
+            <div class="alert alert-warning">
+                <strong>Heads up:</strong> <code>working_dir</code> is not set. Agents and the worker will refuse to operate on this project until you set it.
+            </div>
+        <% } %>
+        <form method="POST" action="/project/<%= project.key %>/settings">
+            <div class="mb-3">
+                <label class="form-label">Working directory (absolute filesystem path)</label>
+                <input class="form-control" name="working_dir" value="<%= project.working_dir || '' %>" placeholder="/home/user/projects/foo">
+                <div class="form-text">Where the agent runs commands for this project.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Default branch</label>
+                <input class="form-control" name="default_branch" value="<%= project.default_branch || 'main' %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Test command</label>
+                <input class="form-control" name="test_command" value="<%= project.test_command || '' %>" placeholder="npm test">
+                <div class="form-text">Optional override; the agent also reads <code>AGENT.md</code> from the repo.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Agent user</label>
+                <select class="form-select" name="agent_user_id">
+                    <option value="">— none —</option>
+                    <% for (const u of userList) { %>
+                        <option value="<%= u._id %>" <%= String(project.agent_user_id) === String(u._id) ? 'selected' : '' %>><%= u.displayName %> (<%= u.username %>)</option>
+                    <% } %>
+                </select>
+                <div class="form-text">The Kose user whose token agents use for this project.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Discord category id</label>
+                <input class="form-control" name="discord_category_id" value="<%= project.discord_category_id || '' %>">
+                <div class="form-text">Set automatically by the bot on first sync; you can override if needed.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</body>
+
+<%- include('../commons/foot.com.ejs') %>

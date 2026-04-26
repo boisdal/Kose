@@ -1,0 +1,42 @@
+<%- include('../commons/head.com.ejs', {title: `Suggestions — ${project.name}`, additionalCss: ['structure']}) %>
+
+<body>
+    <%- include('../commons/navbar.com.ejs', {user: user, currentProject: project.name, currentProjectKey: project.key, urlSuffix: '/backlog'}) %>
+    <div class="p-3">
+        <h1>Suggestions inbox — <%= project.name %></h1>
+        <p class="text-muted">Tasks proposed by agents. Approve to move them to <code>ready</code>; reject to archive with audit trail.</p>
+        <% if (suggestions.length === 0) { %>
+            <p><em>No pending suggestions.</em></p>
+        <% } else { %>
+            <% for (const s of suggestions) { %>
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h5 class="card-title">#<%= s.key %> — <%= s.title %></h5>
+                        <% if (s.priority) { %><span class="badge bg-warning text-dark">priority <%= s.priority %></span><% } %>
+                        <p class="card-text mt-2" style="white-space: pre-wrap;"><%= s.description %></p>
+                        <details>
+                            <summary>Edit before approving</summary>
+                            <form method="POST" action="/project/<%= project.key %>/suggestions/<%= s.key %>/approve" class="mt-2">
+                                <div class="mb-2"><label class="form-label small">Title</label><input class="form-control form-control-sm" name="title" value="<%= s.title %>"></div>
+                                <div class="mb-2"><label class="form-label small">Description</label><textarea class="form-control form-control-sm" name="description" rows="3"><%= s.description %></textarea></div>
+                                <div class="mb-2"><label class="form-label small">Priority</label><input type="number" class="form-control form-control-sm" name="priority" value="<%= s.priority || 0 %>"></div>
+                                <button type="submit" class="btn btn-success btn-sm">Approve with edits</button>
+                            </form>
+                        </details>
+                        <div class="mt-2 d-flex gap-2">
+                            <form method="POST" action="/project/<%= project.key %>/suggestions/<%= s.key %>/approve">
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form method="POST" action="/project/<%= project.key %>/suggestions/<%= s.key %>/reject" class="d-flex gap-2">
+                                <input type="text" class="form-control form-control-sm" name="reason" placeholder="Reject reason (optional)">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        <% } %>
+    </div>
+</body>
+
+<%- include('../commons/foot.com.ejs') %>

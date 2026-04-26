@@ -5,6 +5,13 @@
     <div id="kose-metadata" data-rootIssueKey="<%= issue.key %>" data-projectKey="<%= project.key %>" style="display: none;"></div>
     <div class="p-3">
         <h1><%= issue.title %></h1>
+        <% if (issue.origin === 'agent_suggestion') { %>
+            <span class="badge bg-info">Agent suggestion</span>
+        <% } %>
+        <% if (issue.claimed_by) { %>
+            <p class="text-muted small">Claimed by <code><%= issue.claimed_by %></code><% if (issue.claimed_at) { %> at <%= new Date(issue.claimed_at).toLocaleString() %><% } %></p>
+        <% } %>
+        <%- include('../partials/clarificationBlock.part.ejs', {issue: issue, project: project}) %>
         <table>
             <tr data-field-name="status">
                 <th>Status</th>
@@ -27,8 +34,24 @@
                 <td><%- include('../partials/descriptionIssue.part.ejs') %></td>
             </tr>
         </table>
+        <% if (issue.artifacts && issue.artifacts.length) { %>
+            <hr class="m-3">
+            <h3>Artifacts</h3>
+            <ul>
+                <% for (const a of issue.artifacts) { %>
+                    <li><span class="badge bg-secondary"><%= a.kind %></span> <code><%= a.ref %></code><% if (a.note) { %> — <%= a.note %><% } %></li>
+                <% } %>
+            </ul>
+        <% } %>
         <hr class="m-3">
+        <h3>Activity</h3>
+        <%- include('../partials/activityLog.part.ejs', {issue: issue}) %>
+        <form class="mt-2" method="POST" action="/project/<%= project.key %>/issue/<%= issue.key %>/comment">
+            <div class="mb-2"><textarea class="form-control" name="body" placeholder="Add a comment..." required></textarea></div>
+            <button class="btn btn-sm btn-primary" type="submit">Comment</button>
+        </form>
         <% if (issue.childrenIssueList.length != 0 || true) { %>
+        <hr class="m-3">
         <h3>Détail de l'implémentation :</h3>
         <%- include('../partials/backlog.part.ejs', {rootIssueList: [issue], project: project}) %>
         </div>
