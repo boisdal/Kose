@@ -1,0 +1,12 @@
+{
+  "name": "kose-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Kose project management",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

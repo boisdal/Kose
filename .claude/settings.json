@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(pm2 logs *)",
+      "Bash(pm2 list *)",
+      "Read(//home/bwadaal/.pm2/logs/**)",
+      "Read(//home/bwadaal/.claude/**)"
+    ]
+  }
+}

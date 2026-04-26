@@ -8,7 +8,7 @@ const MongoStore = require('connect-mongo')(session)
 
 var app=express();
 const PORT = process.env.PORT||3000;
-dotenv.config({ path: './config/config.env' })
+dotenv.config({ path: require('path').join(__dirname, 'config/config.env') })
 
 mongoose.connect(process.env.MONGO_URI,{
     useNewUrlParser:true,
@@ -22,9 +22,11 @@ require('./config/passport')(passport)
 
 // Middleware
 app.use(express.urlencoded({extended:true}))
-app.use(express.static('./public'))
+app.use(express.json())
+app.use(express.static(require('path').join(__dirname, 'public')))
 
 app.set('view engine','ejs');
+app.set('views', require('path').join(__dirname, 'views'));
 
 app.use(
     session({
@@ -40,6 +42,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
+app.use('/api', require('./routes/api.route'))
 app.use(require("./routes/index.route"))
 app.use('/auth', require('./routes/auth.route'))
 app.use('/project', require('./routes/project.route'))
