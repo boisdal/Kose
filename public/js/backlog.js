@@ -17,12 +17,12 @@ const bindAddButton = function() {
             $('.parent-choice').removeClass('parent-choice')
             $('#newIssueZone').hide()
             let projectKey = $('#kose-metadata').attr('data-projectKey')
+            let form
             if (parentKey == 'new') {
                 $.get(`/project/${projectKey}/issue/newform`, function(data) {
-                    let form = $(data)
+                    form = $(data)
                     $('.backlog-root').find('div').first().append(form)
                     bindAllStructureEvents()
-                    form.find('.slick').first().trigger('focus')
                 })
             } else {
                 let potentialAddingZone = parent.parent().closest('.issue-root')
@@ -32,7 +32,6 @@ const bindAddButton = function() {
                         potentialAddingZone.children('.issue-root').last().after(form)
                         bindAllStructureEvents()
                         potentialAddingZone.find('.folded-chevron').click()
-                        form.find('.slick').first().trigger('focus')
                     })
                 } else {
                     $.get(`/project/${projectKey}/issue/${parentKey}/parentform`, function(data) {
@@ -43,11 +42,21 @@ const bindAddButton = function() {
                         issue.attr('data-old-issue', oldIssue)
                         bindAllStructureEvents()
                         issue.find('.folded-chevron').click()
-                        form.find('.slick').first().trigger('focus')
                     }) 
 
                 }
             }
+            form.find('.slick').first().trigger('focus')
+            form.find('.hidden-input').each((i, e) => {
+                let hide = $(e)
+                let input = hide.parent('.input-holder').children('.slick')
+                if (input.val().length > 0) {
+                    hide.text(input.val())
+                } else {
+                    hide.text(input.attr('placeholder'))
+                }
+                input.width(hide.width())
+            })
         })
     })
 }
@@ -74,7 +83,7 @@ const bindQuickSendDeleteKeys = function(root) {
     })
 }
 
-const updateInputSize = function() {
+const forceUpdateInputSize = function() {
     $('.hidden-input').each((i, e) => {
         let hide = $(e)
         let input = hide.parent('.input-holder').children('.slick')
@@ -116,6 +125,7 @@ const bindEditAllButton = function() {
     $('#editAllButton').on('click', async () => {
         $('.edit-button').click()
     })
+    forceUpdateInputSize()
 }
 
 const bindSendAllButton = function() {
@@ -193,8 +203,17 @@ const bindEditButton = function() {
         $.get(`/project/${projectKey}/issue/${key}/geteditform`, function(data) {
             let newIssueText = $(data)
             issueText.replaceWith(newIssueText)
-            newIssueText.attr('data-old-issue-text', oldIssueText) 
-            updateInputSize()
+            newIssueText.attr('data-old-issue-text', oldIssueText)
+            newIssueText.find('.hidden-input').each((i, e) => {
+                let hide = $(e)
+                let input = hide.parent('.input-holder').children('.slick')
+                if (input.val().length > 0) {
+                    hide.text(input.val())
+                } else {
+                    hide.text(input.attr('placeholder'))
+                }
+                input.width(hide.width())
+            })
             bindAllStructureEvents()
         })
     })
@@ -267,8 +286,23 @@ const bindAdoptModeButton = function() {
     })
 }
 
+const bindUpdateInputSize = function() {
+    $('.slick').off('input').on('input', (event) => {
+        console.log($(event.target))
+        let inputHolder = $(event.target).closest('.input-holder')
+        let input = inputHolder.find('.slick')
+        let hidden = inputHolder.find('.hidden-input')
+        if (input.val().length > 0) {
+            hidden.text(input.val())
+        } else {
+            hidden.text(input.attr('placeholder'))
+        }
+        input.width(hidden.width())
+    })
+}
+
 const bindAllStructureEvents = function() {
-    updateInputSize()
+    console.log('bindAll triggered')
     bindEditButton()
     bindDeleteButton()
     bindCancelButton()
@@ -279,8 +313,8 @@ const bindAllStructureEvents = function() {
     bindCancelAllButton()
     bindQuickSendDeleteKeys()
     bindAdoptModeButton()
+    bindUpdateInputSize()
     $('.fa-check').closest('.issue-container').find('.fa-chevron-down:not(.folded-chevron)').click()
-    $('html').on('input', updateInputSize)
 }
 
 bindAllStructureEvents()
