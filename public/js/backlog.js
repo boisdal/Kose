@@ -250,7 +250,7 @@ const bindDeleteButton = function() {
         let issueText = $(e.target).closest('.issue-text')
         let issueKey = issueText.attr('data-issue-key')
         let issueTitle = issueText.find('.value').eq(1).text().replaceAll('"', '')
-        if (confirm(`Delete issue n°${issueKey} : ${issueTitle} ?`)) {
+        if (e.shiftKey || confirm(`Delete issue n°${issueKey} : ${issueTitle} ?`)) {
             $.post(`/project/${projectKey}/issue/${issueKey}/delete`, {rootIssueKey: rootIssueKey}, function(data) {
                 $('.backlog-root').replaceWith(data)
                 bindAllStructureEvents()

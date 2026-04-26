@@ -56,4 +56,6 @@ const IssueSchema = new mongoose.Schema({
   },
 })
 
+IssueSchema.set('timestamps', true)
+
 module.exports = mongoose.model('Issue', IssueSchema)
