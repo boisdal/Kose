@@ -98,8 +98,8 @@ const forceUpdateInputSize = function() {
 
 const optionUpdate = function(e) {
     let newState = $(e).val()
-    $(e).removeClass('todo-option doing-option done-option')
-    if (newState == 'todo') {$(e).addClass('todo-option')}
+    $(e).removeClass('ready-option doing-option done-option')
+    if (newState == 'ready') {$(e).addClass('ready-option')}
     if (newState == 'doing') {$(e).addClass('doing-option')}
     if (newState == 'done') {$(e).addClass('done-option')}
 }
@@ -115,6 +115,20 @@ const bindFolding = async function() {
             $(e.target.parentElement.parentElement).children('.issue-root').addClass('hidden-issue')
             $(e.target.parentElement).children('.bar').addClass('hidden-bar')
             $(e.target).addClass('folded-chevron')
+        }
+        return false
+    })
+    $('.classic-fold-button').off('click')
+    $('.classic-fold-button').on('click', (e) => {
+        const btn = $(e.target)
+        const root = btn.closest('.issue-root')
+        const children = root.children('.classic-children')
+        if (btn.hasClass('folded-chevron')) {
+            children.removeClass('hidden-children')
+            btn.removeClass('folded-chevron')
+        } else {
+            children.addClass('hidden-children')
+            btn.addClass('folded-chevron')
         }
         return false
     })
@@ -193,16 +207,26 @@ const bindCancelAllButton = function() {
     })
 }           
 
+const findIssueTextFor = function(target) {
+    // Classic mode: action buttons are siblings of .issue-text inside the card.
+    let card = $(target).closest('.classic-card')
+    if (card.length) return card.find('.issue-text').first()
+    // Code mode: the icon is inside .issue-text.
+    return $(target).closest('.issue-text')
+}
+
 const bindEditButton = function() {
     let projectKey = $('#kose-metadata').attr('data-projectKey')
     $('.edit-button').off('click')
     $('.edit-button').on('click', (e) => {
-        let issueText = $(e.target).parent('.issue-text')
+        let issueText = findIssueTextFor(e.target)
+        let isClassic = $(e.target).closest('.classic-card').length > 0
         let oldIssueText = issueText[0].outerHTML
         let key = issueText.attr('data-issue-key')
         $.get(`/project/${projectKey}/issue/${key}/geteditform`, function(data) {
             let newIssueText = $(data)
             issueText.replaceWith(newIssueText)
+            if (isClassic) newIssueText.addClass('classic-card-header')
             newIssueText.attr('data-old-issue-text', oldIssueText)
             newIssueText.find('.hidden-input').each((i, e) => {
                 let hide = $(e)
@@ -247,9 +271,9 @@ const bindDeleteButton = function() {
     let rootIssueKey = $('#kose-metadata').attr('data-rootIssueKey')
     $('.delete-button').off('click')
     $('.delete-button').on('click', (e) => {
-        let issueText = $(e.target).closest('.issue-text')
+        let issueText = findIssueTextFor(e.target)
         let issueKey = issueText.attr('data-issue-key')
-        let issueTitle = issueText.find('.value').eq(1).text().replaceAll('"', '')
+        let issueTitle = issueText.find('.value').eq(1).text().replaceAll('"', '') || issueText.find('.classic-title').text()
         if (e.shiftKey || confirm(`Delete issue n°${issueKey} : ${issueTitle} ?`)) {
             $.post(`/project/${projectKey}/issue/${issueKey}/delete`, {rootIssueKey: rootIssueKey}, function(data) {
                 $('.backlog-root').replaceWith(data)
@@ -267,7 +291,7 @@ const bindAdoptModeButton = function() {
         $('.child-adopt-button').off('click').on('click', async (e) => {
             // When moving issue is selected
             let button = $(e.target)
-            let movingIssueKey = button.closest('.issue-text').attr('data-issue-key')
+            let movingIssueKey = findIssueTextFor(e.target).attr('data-issue-key')
             // console.log(`Moving issue n°${movingIssueKey}`)
             $('.backlog-root').removeClass('adopt-mode-child')
             $('.backlog-root').addClass('adopt-mode-parent')
@@ -275,7 +299,7 @@ const bindAdoptModeButton = function() {
             descendantAdoptButtonList.addClass('disabled')
             $('.parent-adopt-button').off('click').not(descendantAdoptButtonList).on('click', (e) => {
                 let parentIssueAdoptButton = $(e.target)
-                let parentIssueKey = parentIssueAdoptButton.closest('.issue-text').attr('data-issue-key')
+                let parentIssueKey = findIssueTextFor(e.target).attr('data-issue-key')
                 // console.log(`Chosen new parent for issue n°${movingIssueKey} is issue n°${parentIssueKey}`)
                 $.post(`/project/${projectKey}/issue/${movingIssueKey}/adopt`, {rootIssueKey: rootIssueKey, newParentKey: parentIssueKey}, function(data) {
                     $('.backlog-root').replaceWith(data)

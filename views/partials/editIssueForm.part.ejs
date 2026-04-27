@@ -1,7 +1,34 @@
-<div class="issue-text" data-issue-key="<%= issue.key %>" data-form-type="edit"><span class="issueType hasInput"><div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="userstory"value="<%= issue.issueType %>"  enterkeyhint="next"></div></span> 
-<select class="fa-option" onchange="optionUpdate(this)"><option <% if (issue.status == 'todo') { %>selected<% } %> value="todo" class="fa-option todo-option">&#xf0eb;</option><option <% if (issue.status == 'doing') { %>selected<% } %> value="doing" class="fa-option doing-option">&#xf017;</option><option <% if (issue.status == 'done') { %>selected<% } %> value="done" class="fa-option done-option">&#xf00c;</option></select>
-<span class="attribute">id</span>=<span class="value">"<%= issue.key %>"</span> 
-<span class="attribute">title</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="title" value="<%= issue.title %>" enterkeyhint="next"></div>"</span> 
-<span class="attribute">version</span>=<span class="value">"<select class="version-select"><option value="none">--</option><% for (let version of versionList) {%> <option <% if (''+issue.versionId == ''+version._id) { %>selected<% } %> value="<%= version._id %>"><%= version.versionNumber %></option> <% } %></select>"</span> 
-<span class="attribute">sp</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="5" value="<%= issue.estimation %>" enterkeyhint="send"></div>"</span> 
+<% if (typeof uiMode !== 'undefined' && uiMode === 'classic') { %>
+<div class="issue-text classic-card-header classic-edit-form" data-issue-key="<%= issue.key %>" data-form-type="edit">
+    <span class="classic-edit-field hasInput" title="Type">
+        <input type="text" class="slick form-control form-control-sm" placeholder="userstory" value="<%= issue.issueType %>" enterkeyhint="next">
+    </span>
+    <select class="fa-option form-select form-select-sm classic-edit-status" onchange="optionUpdate(this)" title="Status">
+        <option <% if (issue.status == 'ready') { %>selected<% } %> value="ready" class="fa-option ready-option">&#xf0eb;</option>
+        <option <% if (issue.status == 'doing') { %>selected<% } %> value="doing" class="fa-option doing-option">&#xf017;</option>
+        <option <% if (issue.status == 'done') { %>selected<% } %> value="done" class="fa-option done-option">&#xf00c;</option>
+    </select>
+    <span class="classic-id">#<%= issue.key %></span>
+    <span class="classic-edit-field hasInput classic-edit-title" title="Title">
+        <input type="text" class="slick form-control form-control-sm" placeholder="title" value="<%= issue.title %>" enterkeyhint="next">
+    </span>
+    <select class="version-select form-select form-select-sm" title="Version">
+        <option value="none">--</option>
+        <% for (let version of versionList) { %>
+            <option <% if (''+issue.versionId == ''+version._id) { %>selected<% } %> value="<%= version._id %>"><%= version.versionNumber %></option>
+        <% } %>
+    </select>
+    <span class="classic-edit-field hasInput classic-edit-sp" title="Story points">
+        <input type="text" class="slick form-control form-control-sm" placeholder="5" value="<%= issue.estimation %>" enterkeyhint="send">
+    </span>
+    <button type="button" class="classic-btn classic-btn-delete cancel-button" title="Cancel"><i class="fa fa-times"></i></button>
+</div>
+<% } else { %>
+<div class="issue-text" data-issue-key="<%= issue.key %>" data-form-type="edit"><span class="issueType hasInput"><div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="userstory"value="<%= issue.issueType %>"  enterkeyhint="next"></div></span>
+<select class="fa-option" onchange="optionUpdate(this)"><option <% if (issue.status == 'ready') { %>selected<% } %> value="ready" class="fa-option ready-option">&#xf0eb;</option><option <% if (issue.status == 'doing') { %>selected<% } %> value="doing" class="fa-option doing-option">&#xf017;</option><option <% if (issue.status == 'done') { %>selected<% } %> value="done" class="fa-option done-option">&#xf00c;</option></select>
+<span class="attribute">id</span>=<span class="value">"<%= issue.key %>"</span>
+<span class="attribute">title</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="title" value="<%= issue.title %>" enterkeyhint="next"></div>"</span>
+<span class="attribute">version</span>=<span class="value">"<select class="version-select"><option value="none">--</option><% for (let version of versionList) {%> <option <% if (''+issue.versionId == ''+version._id) { %>selected<% } %> value="<%= version._id %>"><%= version.versionNumber %></option> <% } %></select>"</span>
+<span class="attribute">sp</span>=<span class="value hasInput">"<div class="input-holder"><span class="hidden-input"></span><input type="text" class="slick" placeholder="5" value="<%= issue.estimation %>" enterkeyhint="send"></div>"</span>
 <i class="fa fa-times cancel-button"></i></div>
+<% } %>

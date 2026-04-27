@@ -1,7 +1,13 @@
 <div class="backlog-root">
-    <div class="p-2" style="margin-left: -2rem;">
-        <% for (let issue of rootIssueList){ %>
-            <%- include('../partials/issue.part.ejs', {issue: issue, project: project}) %>
+    <div class="p-2" style="<%= (typeof uiMode !== 'undefined' && uiMode === 'classic') ? '' : 'margin-left: -2rem;' %>">
+        <% if (typeof uiMode !== 'undefined' && uiMode === 'classic') { %>
+            <% for (let issue of rootIssueList){ %>
+                <%- include('../partials/issue.classic.part.ejs', {issue: issue, project: project}) %>
+            <% } %>
+        <% } else { %>
+            <% for (let issue of rootIssueList){ %>
+                <%- include('../partials/issue.part.ejs', {issue: issue, project: project}) %>
+            <% } %>
         <% } %>
     </div>
     <div id="newIssueZone" style="display: none;" data-issue-key="new"></div>

@@ -26,6 +26,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  uiMode: {
+    type: String,
+    enum: ['code', 'classic'],
+    default: 'code',
+  },
 })
 
 module.exports = mongoose.model('User', UserSchema)

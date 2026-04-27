@@ -1,11 +1,11 @@
 const Issue = require('../models/Issue.model')
 const Version = require('../models/Version.model')
 
-const TODO_STATUSES = ['todo', 'ready', 'suggested']
+const READY_STATUSES = ['ready', 'suggested']
 const DONE_STATUSES = ['done', 'released']
 
 function rollupBucket(status) {
-    if (TODO_STATUSES.includes(status)) return 'todo'
+    if (READY_STATUSES.includes(status)) return 'ready'
     if (DONE_STATUSES.includes(status)) return 'done'
     return 'doing'
 }
@@ -19,19 +19,19 @@ const populateIssueChildren = async function(issue) {
     }
     if (issue.childrenIssueList.length != 0) {
         issue.estimation = issue.childrenIssueList.map(i=>i.estimation).reduce((a,b)=>a+b)
-        if (issue.childrenIssueList.every((e) => rollupBucket(e.status) === 'todo')) {
-        issue.status = 'todo'
+        if (issue.childrenIssueList.every((e) => rollupBucket(e.status) === 'ready')) {
+        issue.status = 'ready'
         } else if (issue.childrenIssueList.every((e) => rollupBucket(e.status) === 'done')) {
         issue.status = 'done'
         } else {
         issue.status = 'doing'
         }
-        issue.chTodoSp = issue.childrenIssueList.map(i=>i.chTodoSp).reduce((a,b)=>a+b)
+        issue.chReadySp = issue.childrenIssueList.map(i=>i.chReadySp).reduce((a,b)=>a+b)
         issue.chDoingSp = issue.childrenIssueList.map(i=>i.chDoingSp).reduce((a,b)=>a+b)
         issue.chDoneSp = issue.childrenIssueList.map(i=>i.chDoneSp).reduce((a,b)=>a+b)
     } else {
         const bucket = rollupBucket(issue.status)
-        issue.chTodoSp = bucket === 'todo' ? issue.estimation : 0
+        issue.chReadySp = bucket === 'ready' ? issue.estimation : 0
         issue.chDoingSp = bucket === 'doing' ? issue.estimation : 0
         issue.chDoneSp = bucket === 'done' ? issue.estimation : 0
     }

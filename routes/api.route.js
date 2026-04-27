@@ -618,7 +618,7 @@ router.get('/projects/:projectKey/context', ensureApiAuth, async (req, res) => {
     const project = await resolveProjectByKey(req, res)
     if (!project) return
     const issues = await Issue.find({ projectId: project._id }).select('key title status priority claimed_by clarification updatedAt origin').lean()
-    const summary = { ready: 0, in_progress: 0, blocked: 0, suggested: 0, done: 0, released: 0, todo: 0, doing: 0 }
+    const summary = { ready: 0, in_progress: 0, blocked: 0, suggested: 0, done: 0, released: 0, doing: 0 }
     for (const i of issues) if (summary[i.status] !== undefined) summary[i.status]++
     const recent = await Issue.find({ projectId: project._id })
       .sort({ updatedAt: -1 }).limit(10)

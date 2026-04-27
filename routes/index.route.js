@@ -28,10 +28,11 @@ router.get('/home', ensureAuth, async (req, res) => {
         Issue.find({ projectId: project._id }).select('status estimation').lean(),
       ])
       const lastActivity = latestIssue ? latestIssue.updatedAt : null
-      const stats = { todo: { count: 0, sp: 0 }, doing: { count: 0, sp: 0 }, done: { count: 0, sp: 0 } }
+      const stats = { ready: { count: 0, sp: 0 }, doing: { count: 0, sp: 0 }, done: { count: 0, sp: 0 } }
+      const bucket = { ready: 'ready', suggested: 'ready', doing: 'doing', in_progress: 'doing', blocked: 'doing', done: 'done', released: 'done' }
       for (const issue of issues) {
-        const s = issue.status
-        if (stats[s]) { stats[s].count++; stats[s].sp += issue.estimation || 0 }
+        const b = bucket[issue.status]
+        if (b) { stats[b].count++; stats[b].sp += issue.estimation || 0 }
       }
       return { project, stats, lastActivity, lastActivityStr: timeAgo(lastActivity) }
     })

@@ -10,7 +10,7 @@ const VersionSchema = new mongoose.Schema({
     required: true,
   },
   issueList: [this],
-  issueTodoSp: {
+  issueReadySp: {
     type: Number,
     required: false,
   },

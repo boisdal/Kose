@@ -29,6 +29,7 @@ module.exports = {
       }
       let projectList = await Project.find(criteria)
       req.user.set({projectList: projectList})
+      res.locals.uiMode = req.user.uiMode || 'code'
       return next()
     } else {
       res.redirect('/')

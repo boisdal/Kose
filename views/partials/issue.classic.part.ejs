@@ -1,0 +1,37 @@
+<div class="issue-root">
+    <div class="classic-card status-<%= issue.status %>" data-issue-key="<%= issue.key %>">
+        <span class="classic-type-tag"><%= issue.issueType %></span>
+        <div class="classic-card-row">
+            <% if (issue.childrenIssueList && issue.childrenIssueList.length) { %>
+                <i class="classic-fold-button fa fa-chevron-down fa-fw"></i>
+            <% } else { %>
+                <i class="classic-fold-spacer fa fa-fw"></i>
+            <% } %>
+            <%- include('./issueText.classic.part.ejs', {issue: issue, project: project}) %>
+            <div class="classic-actions">
+                <button type="button" class="classic-btn classic-btn-edit edit-button hide-on-adopt-mode" title="Edit"><i class="fa fa-pencil"></i></button>
+                <button type="button" class="classic-btn classic-btn-delete delete-button hide-on-adopt-mode" title="Delete"><i class="fa-regular fa-trash-can"></i></button>
+                <button type="button" class="classic-btn classic-btn-adopt child-adopt-button show-on-adopt-mode" title="Move under another parent"><i class="fa fa-arrow-right-from-bracket fa-rotate-270"></i></button>
+                <button type="button" class="classic-btn classic-btn-adopt parent-adopt-button show-on-adopt-mode" title="Adopt as child"><i class="fa fa-arrow-right-to-bracket fa-rotate-90"></i></button>
+                <a href="/project/<%= project.key %>/issue/<%= issue.key %>" class="classic-btn classic-btn-open hide-on-adopt-mode" title="Open issue"><i class="fa fa-up-right-from-square"></i></a>
+            </div>
+        </div>
+        <% if (issue.childrenIssueList && issue.childrenIssueList.length) { %>
+        <div class="classic-progress d-none d-lg-flex">
+            <% var totalSp = (issue.chReadySp || 0) + (issue.chDoingSp || 0) + (issue.chDoneSp || 0); %>
+            <% if (totalSp > 0) { %>
+            <span class="classic-progress-ready" style="width: <%= Math.floor(100 * (issue.chReadySp || 0) / totalSp) %>%"></span>
+            <span class="classic-progress-doing" style="width: <%= Math.floor(100 * (issue.chDoingSp || 0) / totalSp) %>%"></span>
+            <span class="classic-progress-done" style="width: <%= Math.floor(100 * (issue.chDoneSp || 0) / totalSp) %>%"></span>
+            <% } %>
+        </div>
+        <% } %>
+    </div>
+    <% if (issue.childrenIssueList && issue.childrenIssueList.length) { %>
+    <div class="classic-children">
+        <% for (let childIssue of issue.childrenIssueList){ %>
+            <%- include('./issue.classic.part.ejs', {issue: childIssue, project: project}) %>
+        <% } %>
+    </div>
+    <% } %>
+</div>

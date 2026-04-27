@@ -1,0 +1,19 @@
+:root {
+    --status-ready: lightgray;
+    --status-doing: rgb(58, 203, 255);
+    --status-in_progress: rgb(58, 203, 255);
+    --status-blocked: orange;
+    --status-suggested: violet;
+    --status-done: lightgreen;
+    --status-released: deepskyblue;
+
+    --bracket: #808080;
+    --issue-type: #409cd6;
+    --attribute: #79bdc3;
+    --value: #ce9178;
+
+    --bg: #212529;
+    --bar-ready: #a940d6;
+    --bar-doing: #407ed6;
+    --bar-done: #77d640;
+}

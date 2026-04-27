@@ -20,19 +20,19 @@ const populateVersionIssueList = async function(version) {
       for (let versionIssue of version.issueList) {
       await populateIssueChildren(versionIssue)
       }
-      if (version.issueList.every((e) => e.status == 'todo')) {
-      version.status = 'todo'
+      if (version.issueList.every((e) => e.status == 'ready')) {
+      version.status = 'ready'
       } else if (version.issueList.every((e) => e.status == 'done')) {
       version.status = 'done'
       } else {
       version.status = 'doing'
       }
-      version.issueTodoSp = version.issueList.map(i=>i.chTodoSp).reduce((a,b)=>a+b)
+      version.issueReadySp = version.issueList.map(i=>i.chReadySp).reduce((a,b)=>a+b)
       version.issueDoingSp = version.issueList.map(i=>i.chDoingSp).reduce((a,b)=>a+b)
       version.issueDoneSp = version.issueList.map(i=>i.chDoneSp).reduce((a,b)=>a+b)
   } else {
-      version.status = 'todo'
-      version.issueTodoSp = 0
+      version.status = 'ready'
+      version.issueReadySp = 0
       version.issueDoingSp = 0
       version.issueDoneSp = 0
   }

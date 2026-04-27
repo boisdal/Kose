@@ -1,17 +1,42 @@
 .bracket {
-    color: #808080;
+    color: var(--bracket);
 }
 
 .issueType {
-    color: #409cd6;
+    color: var(--issue-type);
 }
 
 .attribute {
-    color: #79bdc3;
+    color: var(--attribute);
 }
 
 .value {
-    color: #ce9178;
+    color: var(--value);
+}
+
+.status-icon.status-ready {
+    color: var(--status-ready);
+}
+
+.status-icon.status-doing,
+.status-icon.status-in_progress {
+    color: var(--status-doing);
+}
+
+.status-icon.status-blocked {
+    color: var(--status-blocked);
+}
+
+.status-icon.status-suggested {
+    color: var(--status-suggested);
+}
+
+.status-icon.status-done {
+    color: var(--status-done);
+}
+
+.status-icon.status-released {
+    color: var(--status-released);
 }
 
 
@@ -34,16 +59,16 @@
     position: relative;
 }
 
-.bar-part.todo-part {
-    background-color: #a940d6;
+.bar-part.ready-part {
+    background-color: var(--bar-ready);
 }
 
 .bar-part.doing-part {
-    background-color: #407ed6;
+    background-color: var(--bar-doing);
 }
 
 .bar-part.done-part {
-    background-color: #77d640;
+    background-color: var(--bar-done);
 }
 
 .hidden-issue {
@@ -57,12 +82,12 @@
 .fold-button {
     cursor: pointer;
     transition: transform 100ms ease-in-out;
-    color: #808080;
-    user-select: none; /* standard syntax */
-    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-    -moz-user-select: none; /* mozilla browsers */
-    -khtml-user-select: none; /* webkit (konqueror) browsers */
-    -ms-user-select: none; /* IE10+ */
+    color: var(--bracket);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 .fold-button.folded-chevron {
@@ -120,61 +145,61 @@ div.input-holder {
 }
 
 .issueType input.slick::placeholder {
-    color: #409cd6;
+    color: var(--issue-type);
 }
 
 .value input.slick::placeholder {
-    color: #ce9178;
+    color: var(--value);
 }
 
 .fa-option {
     font-family: 'FontAwesome';
-    background-color: #212529;
+    background-color: var(--bg);
     border: none;
-    color: lightgray;
+    color: var(--status-ready);
     cursor: pointer;
 }
 
-.fa-option.todo-option {
-    color: lightgray!important;
+.fa-option.ready-option {
+    color: var(--status-ready)!important;
 }
 
 .fa-option.doing-option {
-    color: rgb(58, 203, 255)!important;
+    color: var(--status-doing)!important;
 }
 
 .fa-option.done-option {
-    color: lightgreen!important;
+    color: var(--status-done)!important;
 }
 
 .cancel-button {
     cursor: pointer;
     color: rgb(252, 99, 99);
-    user-select: none; /* standard syntax */
-    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-    -moz-user-select: none; /* mozilla browsers */
-    -khtml-user-select: none; /* webkit (konqueror) browsers */
-    -ms-user-select: none; /* IE10+ */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 .edit-button {
     cursor: pointer;
     color: #0d6efd;
-    user-select: none; /* standard syntax */
-    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-    -moz-user-select: none; /* mozilla browsers */
-    -khtml-user-select: none; /* webkit (konqueror) browsers */
-    -ms-user-select: none; /* IE10+ */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 .delete-button {
     cursor: pointer;
     color: rgb(252, 99, 99);
-    user-select: none; /* standard syntax */
-    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-    -moz-user-select: none; /* mozilla browsers */
-    -khtml-user-select: none; /* webkit (konqueror) browsers */
-    -ms-user-select: none; /* IE10+ */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 .adopt-mode-child .hide-on-adopt-mode {
@@ -187,22 +212,22 @@ div.input-holder {
 
 .child-adopt-button {
     cursor: pointer;
-    color: lightgray;
-    user-select: none; /* standard syntax */
-    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-    -moz-user-select: none; /* mozilla browsers */
-    -khtml-user-select: none; /* webkit (konqueror) browsers */
-    -ms-user-select: none; /* IE10+ */
+    color: var(--status-ready);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 .parent-adopt-button {
     cursor: pointer;
-    color: lightgray;
-    user-select: none; /* standard syntax */
-    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-    -moz-user-select: none; /* mozilla browsers */
-    -khtml-user-select: none; /* webkit (konqueror) browsers */
-    -ms-user-select: none; /* IE10+ */
+    color: var(--status-ready);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 .show-on-adopt-mode {
@@ -223,15 +248,15 @@ div.input-holder {
 }
 
 select.version-select {
-    background-color: #212529;
+    background-color: var(--bg);
     border: none;
-    color: #ce9178;
+    color: var(--value);
     cursor: pointer;
 }
 
 .backlog-button-row {
     position: sticky;
     bottom: 0px;
-    background-color: #212529;
+    background-color: var(--bg);
     z-index: 10;
 }

@@ -1,0 +1,16 @@
+<div class="issue-text classic-card-header" data-issue-key="<%= issue.key %>">
+    <span class="classic-status-badge">
+        <% if (issue.status == 'ready') { %><i class="fa fa-lightbulb status-icon status-ready"></i> Ready<% } %>
+        <% if (issue.status == 'doing' || issue.status == 'in_progress') { %><i class="fa fa-clock status-icon status-doing"></i> In progress<% } %>
+        <% if (issue.status == 'blocked') { %><i class="fa fa-ban status-icon status-blocked"></i> Blocked<% } %>
+        <% if (issue.status == 'suggested') { %><i class="fa fa-comment-dots status-icon status-suggested"></i> Suggested<% } %>
+        <% if (issue.status == 'done') { %><i class="fa fa-check status-icon status-done"></i> Done<% } %>
+        <% if (issue.status == 'released') { %><i class="fa fa-rocket status-icon status-released"></i> Released<% } %>
+    </span>
+    <span class="classic-id">#<%= issue.key %></span>
+    <span class="classic-title"><%= issue.title %></span>
+    <span class="classic-meta">
+        <% if (issue.versionNumber) { %><span>v<%= issue.versionNumber %></span><% } %>
+        <span>sp <%= issue.estimation %></span>
+    </span>
+</div>

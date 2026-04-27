@@ -26,7 +26,13 @@
             </li>
         </ul>
     </div>
-    <a class="navbar-brand btn btn-danger btn-small ms-auto" style="color: white;" href="/auth/logout"> <i class="fa fa-sign-out"></i> <span class="d-none d-md-inline">Logout</span></a>
+    <form method="POST" action="/account/uiMode" class="ms-auto me-2 d-inline">
+        <button type="submit" class="btn btn-outline-light btn-sm" title="Toggle UI mode (currently <%= (typeof uiMode !== 'undefined' ? uiMode : 'code') %>)">
+            <i class="fa <%= (typeof uiMode !== 'undefined' && uiMode === 'classic') ? 'fa-code' : 'fa-th-large' %>"></i>
+        </button>
+    </form>
+    <a class="navbar-brand btn btn-secondary btn-small me-2" style="color: white;" href="/account" title="Account settings"><i class="fa fa-user"></i> <span class="d-none d-md-inline">Account</span></a>
+    <a class="navbar-brand btn btn-danger btn-small" style="color: white;" href="/auth/logout"> <i class="fa fa-sign-out"></i> <span class="d-none d-md-inline">Logout</span></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>

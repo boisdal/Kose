@@ -7,11 +7,11 @@
                     <span><%= lastActivityStr %></span>
                 </div>
             </div>
-            <div class="badge"><span><%= stats.todo.count + stats.doing.count %> open</span></div>
+            <div class="badge"><span><%= stats.ready.count + stats.doing.count %> open</span></div>
         </div>
         <div class="mt-5">
             <h6 class="heading"><%= project.description %></h6>
-            <% const totalSp = stats.todo.sp + stats.doing.sp + stats.done.sp %>
+            <% const totalSp = stats.ready.sp + stats.doing.sp + stats.done.sp %>
             <% const donePct = totalSp > 0 ? Math.round(stats.done.sp / totalSp * 100) : 0 %>
             <div class="mt-5">
                 <div class="progress">

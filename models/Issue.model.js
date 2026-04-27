@@ -23,7 +23,7 @@ const ClarificationSchema = new mongoose.Schema({
 }, { _id: false })
 
 const ISSUE_STATUSES = [
-  'todo', 'doing', 'done',
+  'doing', 'done',
   'ready', 'in_progress', 'blocked', 'suggested', 'released',
 ]
 
@@ -45,7 +45,7 @@ const IssueSchema = new mongoose.Schema({
     required: false,
   },
   childrenIssueList: [this],
-  chTodoSp: {
+  chReadySp: {
     type: Number,
     required: false,
   },

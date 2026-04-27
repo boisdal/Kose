@@ -1,0 +1,384 @@
+/* Classic UI mode — card/tree layout. Loaded only when uiMode === 'classic'. */
+
+.classic-card {
+    background-color: #2b3036;
+    border: 1px solid #495057;
+    border-left: 4px solid var(--bracket);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 6px 0;
+    position: relative;
+}
+
+.classic-card.status-ready {
+    border-left-color: var(--status-ready);
+}
+
+.classic-card.status-doing,
+.classic-card.status-in_progress {
+    border-left-color: var(--status-doing);
+}
+
+.classic-card.status-blocked {
+    border-left-color: var(--status-blocked);
+}
+
+.classic-card.status-suggested {
+    border-left-color: var(--status-suggested);
+}
+
+.classic-card.status-done {
+    border-left-color: var(--status-done);
+}
+
+.classic-card.status-released {
+    border-left-color: var(--status-released);
+}
+
+.classic-card .classic-type-tag {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--issue-type);
+    font-weight: 600;
+}
+
+.classic-card .classic-card-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-right: 4rem;
+}
+
+.classic-card .classic-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 0;
+}
+
+.classic-fold-button {
+    cursor: pointer;
+    color: var(--bracket);
+    transition: transform 100ms ease-in-out;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.classic-fold-button.folded-chevron {
+    transform: rotate(-90deg);
+}
+
+.classic-fold-spacer {
+    color: transparent;
+    flex-shrink: 0;
+}
+
+.classic-children.hidden-children {
+    display: none;
+}
+
+.classic-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.classic-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+    border: 1px solid #495057;
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #adb5bd;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 100ms ease-in-out, color 100ms ease-in-out, border-color 100ms ease-in-out;
+    padding: 0;
+    font-size: 0.85rem;
+}
+
+.classic-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.classic-btn-edit:hover {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+.classic-btn-delete:hover {
+    border-color: rgb(252, 99, 99);
+    color: rgb(252, 99, 99);
+}
+
+.classic-btn-open:hover {
+    border-color: var(--status-released);
+    color: var(--status-released);
+}
+
+/* Edit form (classic) — standard bordered inputs/selects in a flex row.
+   Keeps the .slick / .fa-option / .version-select / .hasInput hooks
+   that backlog.js relies on. */
+.classic-edit-form {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.classic-edit-form .classic-edit-field {
+    display: inline-flex;
+    align-items: center;
+}
+
+.classic-edit-form .form-control,
+.classic-edit-form .form-select {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid #495057;
+    height: 30px;
+    padding: 2px 8px;
+    font-size: 0.85rem;
+}
+
+.classic-edit-form .form-control:focus,
+.classic-edit-form .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+.classic-edit-form input.slick {
+    all: unset;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid #495057;
+    border-radius: 4px;
+    height: 30px;
+    padding: 2px 8px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    min-width: 60px;
+}
+
+.classic-edit-form input.slick:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+.classic-edit-form .classic-edit-title input.slick {
+    width: 320px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.classic-edit-form .classic-edit-sp input.slick {
+    width: 60px;
+}
+
+.classic-edit-form .classic-edit-status {
+    width: 60px;
+    background-color: var(--bg);
+    font-family: 'FontAwesome', sans-serif;
+    text-align: center;
+}
+
+.classic-edit-form .version-select {
+    width: auto;
+    min-width: 80px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    cursor: pointer;
+}
+
+.classic-edit-form .cancel-button {
+    margin-left: auto;
+    color: rgb(252, 99, 99);
+}
+
+.classic-edit-form .cancel-button:hover {
+    border-color: rgb(252, 99, 99);
+    color: rgb(252, 99, 99);
+}
+
+.classic-card .classic-title {
+    font-weight: 500;
+    color: white;
+}
+
+.classic-card .classic-id {
+    color: var(--bracket);
+    font-size: 0.85rem;
+}
+
+.classic-card .classic-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.classic-card .classic-meta {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--bracket);
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.classic-children {
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+    border-left: 1px dashed #495057;
+}
+
+.classic-progress {
+    height: 4px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    margin-top: 6px;
+}
+
+.classic-progress .classic-progress-ready {
+    background-color: var(--bar-ready);
+    height: 100%;
+}
+
+.classic-progress .classic-progress-doing {
+    background-color: var(--bar-doing);
+    height: 100%;
+}
+
+.classic-progress .classic-progress-done {
+    background-color: var(--bar-done);
+    height: 100%;
+}
+
+/* Issue detail (classic) — keep <table> markup so JS keeps working,
+   but render it as a card with two-column key/value rows. */
+table.classic-detail-table {
+    display: block;
+    background-color: #2b3036;
+    border: 1px solid #495057;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+}
+
+table.classic-detail-table tbody {
+    display: grid;
+    grid-template-columns: 200px auto 1fr;
+    gap: 8px 12px;
+    align-items: baseline;
+    width: 100%;
+}
+
+table.classic-detail-table tr {
+    display: contents;
+}
+
+table.classic-detail-table th {
+    color: var(--attribute);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 4px 0;
+}
+
+table.classic-detail-table td {
+    padding: 4px 0;
+    color: white;
+}
+
+/* Version list (classic) — keep ul/li markup so JS keeps working,
+   but render each li as a card with badge + nested issue list. */
+.classic-version-timeline > ul {
+    border-left: none;
+    padding: 0;
+}
+
+.classic-version-timeline > ul > li {
+    background-color: #2b3036;
+    border: 1px solid #495057;
+    border-left: 4px solid var(--status-released);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+}
+
+.classic-version-timeline > ul > li:before {
+    display: none;
+}
+
+.classic-version-timeline > ul > li:hover {
+    background-color: #353a40;
+}
+
+.classic-version-timeline > ul > li:hover:before {
+    display: none;
+}
+
+.classic-version-timeline > ul > li > span {
+    background-color: var(--status-released);
+    color: var(--bg);
+    border-radius: 999px;
+    padding: 2px 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.classic-version-timeline > ul > li .version-content h3 {
+    color: white;
+    margin-top: 8px;
+}
+
+.classic-version-timeline > ul > li .version-content ul {
+    margin-top: 8px;
+    padding-left: 1.2rem;
+    list-style: disc;
+}
+
+.classic-version-timeline > ul > li .version-content ul li {
+    background: transparent;
+    border: none;
+    padding: 2px 0;
+    margin: 0;
+}
+
+.classic-version-timeline > ul > li span.version-ready,
+.classic-version-timeline > ul > li span.version-ready-sp {
+    background-color: var(--status-ready);
+    color: var(--bg);
+}
+
+.classic-version-timeline > ul > li span.version-doing,
+.classic-version-timeline > ul > li span.version-doing-sp {
+    background-color: var(--status-doing);
+    color: var(--bg);
+}
+
+.classic-version-timeline > ul > li span.version-done,
+.classic-version-timeline > ul > li span.version-done-sp {
+    background-color: var(--status-done);
+    color: var(--bg);
+}

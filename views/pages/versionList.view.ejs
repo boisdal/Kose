@@ -12,7 +12,7 @@
       <button id="sendAllButton" type="button" class="btn btn-outline-success mx-2"><i class="fa fa-paper-plane"></i></button>
       <button id="cancelAllButton" type="button" class="btn btn-outline-danger mx-2"><i class="fa fa-times"></i></button>
     </div>
-    <div class="version-timeline">
+    <div class="version-timeline <%= (typeof uiMode !== 'undefined' && uiMode === 'classic') ? 'classic-version-timeline' : '' %>">
         <ul>
             <% for (let version of versionList){ %>
               <%- include('../partials/version.part.ejs', {mode: 'list', version: version}) %>

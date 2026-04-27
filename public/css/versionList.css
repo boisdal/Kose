@@ -72,8 +72,8 @@
   }
 }
 
-.version-timeline > ul > li span.version-todo,
-.version-timeline > ul > li span.version-todo-sp {
+.version-timeline > ul > li span.version-ready,
+.version-timeline > ul > li span.version-ready-sp {
   background-color: grey;
 }
 
